@@ -11,10 +11,13 @@ import Link from "next/link";
 import CreateForm from "../components/form_create";
 
 interface Props {
-  param: string;
-  searchParams: { [key: string]: string | string[] | undefined };
+  // param: string;
+  // searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { parent: string | undefined };
 }
-export default async function Page({ param, searchParams }: Props) {
+export default async function CreateCategoryPage({ searchParams }: Props) {
+  // const parent = await get_category(searchParams.parent);
+
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-4 justify-between">
@@ -27,9 +30,9 @@ export default async function Page({ param, searchParams }: Props) {
           </>
         </PageHeader>
         <>
-          <Link href={"#"}>
+          {/* <Link href={"#"}>
             <Button variant={"secondary"}>Create new </Button>
-          </Link>
+          </Link> */}
         </>
       </div>
       <div className="flex flex-row gap-8 justify-between">

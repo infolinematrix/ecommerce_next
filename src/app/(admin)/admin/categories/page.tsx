@@ -19,59 +19,16 @@ import {
 } from "@/components/ui/table";
 import { get_parents } from "@/lib/actions/category";
 import { HomeIcon } from "@radix-ui/react-icons";
+import { CategoryType } from "@/db/schema/categpories";
 
 interface Props {
-  param: string;
-  searchParams: { [key: string]: string | string[] | undefined };
+  // param: string;
+  // searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { parent: string | undefined };
 }
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
-
-export default async function CategoriesPage({ param, searchParams }: Props) {
-  const data = await get_parents();
+export default async function CategoriesPage({ searchParams }: Props) {
+  const data = await get_parents(searchParams.parent);
 
   return (
     <Shell variant="sidebar" className="overflow-hidden">
@@ -103,7 +60,9 @@ export default async function CategoriesPage({ param, searchParams }: Props) {
             ) : (
               <div>Loading....</div>
             )} */}
-            <DataTable data />
+            <div className="pt-4">
+              <DataTable data={data} parent={searchParams.parent} />
+            </div>
           </ScrollArea>
         </div>
         <div className="flex w-1/3">sad</div>
@@ -112,25 +71,42 @@ export default async function CategoriesPage({ param, searchParams }: Props) {
   );
 }
 
-export const DataTable = (data: any) => {
+export const DataTable = ({ data }: any, parent: string | undefined) => {
   return (
     <>
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Child</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="w-[100px]">Parent</TableHead>
+            <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
+          {data.map((category: CategoryType) => (
+            <TableRow key={category.id}>
+              <TableCell className="font-medium">
+                {category.has_child == true ? (
+                  <Link
+                    href={{
+                      pathname: "/admin/categories",
+                      query: { parent: category.id },
+                    }}
+                  >
+                    {category.name}
+                  </Link>
+                ) : (
+                  <span>{category.name}</span>
+                )}
+              </TableCell>
+              <TableCell>{category.has_child ? "True" : "False"}</TableCell>
+              <TableCell>{category.active ? "Active" : "Inactive"}</TableCell>
+              <TableCell>
+                {category.parent_id == null ? "Root" : category.parent_id}
+              </TableCell>
               <TableCell className="text-right">
                 {/* <Button variant={"secondary"} className="">
                   <HomeIcon />

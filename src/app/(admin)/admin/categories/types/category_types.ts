@@ -8,6 +8,7 @@ const booleanString = z
   .transform((value) => value === "true");
 
 export const createCategorySchema = z.object({
+  parent_id: z.string().nullable(),
   name: z.string().min(1).max(180),
   identifier: z.string().min(1).max(180),
   short_description: z.string().min(3).max(255),

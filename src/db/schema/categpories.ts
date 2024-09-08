@@ -43,3 +43,5 @@ export const categories = pgTable(
 //     relationName: "subCategories",
 //   }),
 // }));
+
+export type CategoryType = typeof categories.$inferSelect;

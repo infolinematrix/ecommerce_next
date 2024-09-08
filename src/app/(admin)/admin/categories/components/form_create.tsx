@@ -38,7 +38,7 @@ import { createCategorySchema } from "../types/category_types";
 //   active: z.boolean(),
 // });
 
-export default function CreateForm(props: { parentId: any }) {
+export default function CreateForm(props: { parentId: string | undefined }) {
   const form = useForm<z.infer<typeof createCategorySchema>>({
     resolver: zodResolver(createCategorySchema),
     mode: "onChange",
@@ -80,8 +80,10 @@ export default function CreateForm(props: { parentId: any }) {
         <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
           <p className="pb-5 text-muted-foreground">
             You are creating under{" "}
-            <span className="text-primary font-medium">Footwares</span>
+            <span className="text-primary font-medium"></span>
           </p>
+
+          <Input type="text" defaultValue={props.parentId} name="parent_id" />
 
           <div className="flex flex-row gap-4 justify-between">
             <div className="w-full">

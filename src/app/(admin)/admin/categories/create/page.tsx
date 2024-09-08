@@ -35,7 +35,7 @@ export default async function Page({ param, searchParams }: Props) {
       <div className="flex flex-row gap-8 justify-between">
         <div className="flex w-2/3">
           <ScrollArea className="w-full px-4">
-            <CreateForm />
+            <CreateForm parentId={searchParams.parent} />
           </ScrollArea>
         </div>
         <div className="flex w-1/3">sad</div>

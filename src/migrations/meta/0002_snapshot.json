@@ -1,6 +1,6 @@
 {
-  "id": "4895769a-71ef-45e4-adf7-6cf69efd3d0b",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "35ceb185-df60-4b1a-9b5d-eb43e5216113",
+  "prevId": "b4aeba5b-1300-4302-b3b6-6704cf10522c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -12,7 +12,8 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "parent_id": {
           "name": "parent_id",
@@ -68,21 +69,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "fkey_parent_id": {
-          "name": "fkey_parent_id",
-          "tableFrom": "categories",
-          "tableTo": "categories",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "categories_name_unique": {

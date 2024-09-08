@@ -70,7 +70,7 @@ const invoices = [
   },
 ];
 
-export default async function Page({ param, searchParams }: Props) {
+export default async function CategoriesPage({ param, searchParams }: Props) {
   const data = await get_parents();
 
   return (
@@ -88,7 +88,12 @@ export default async function Page({ param, searchParams }: Props) {
                 </>
               </PageHeader>
               <>
-                <Link href={"#"}>
+                <Link
+                  href={{
+                    pathname: "/admin/categories/create/",
+                    query: { parent: searchParams.parent },
+                  }}
+                >
                   <Button variant={"secondary"}>Create new </Button>
                 </Link>
               </>

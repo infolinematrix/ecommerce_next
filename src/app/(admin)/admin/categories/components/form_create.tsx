@@ -27,31 +27,52 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CameraIcon, ImageIcon } from "@radix-ui/react-icons";
+import api, { fetcher } from "@/lib/apiClient";
+import { createCategorySchema } from "../types/category_types";
 
-const formSchema = z.object({
-  name: z.string().min(1).max(180),
-  identifier: z.string().min(1).max(180),
-  short_description: z.string().min(3).max(255),
-  has_child: z.string().default("true"),
-  active: z.string().default("true"),
-});
+// const formSchema = z.object({
+//   name: z.string().min(1).max(180),
+//   identifier: z.string().min(1).max(180),
+//   short_description: z.string().min(3).max(255),
+//   has_child: z.boolean(),
+//   active: z.boolean(),
+// });
 
-function onSubmit(values: z.infer<typeof formSchema>) {
-  console.log(values);
-}
-
-export default function CreateForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export default function CreateForm(props: { parentId: any }) {
+  const form = useForm<z.infer<typeof createCategorySchema>>({
+    resolver: zodResolver(createCategorySchema),
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
       name: "",
       identifier: "",
       short_description: "",
-      has_child: "true",
+      has_child: "false",
+      active: true,
     },
   });
+
+  const onSubmit = async (formData: z.infer<typeof createCategorySchema>) => {
+    //-parse zod schema
+    const monkeyParse = createCategorySchema.safeParse(formData);
+    //--validate zod schema
+    if (!monkeyParse.success) {
+      console.log("----VALIDATION ERROR");
+      return;
+    }
+
+    const data = monkeyParse.data;
+
+    console.log(data);
+
+    const response = await api.post(`/admin/categories/create/api`, data, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    // console.log("...response", response);
+  };
 
   return (
     <>
@@ -177,7 +198,7 @@ export default function CreateForm() {
           </div>
 
           <div className="pt-8">
-            <FormField
+            {/* <FormField
               control={form.control}
               name="active"
               render={({ field }) => (
@@ -196,7 +217,27 @@ export default function CreateForm() {
                   </label>
                 </FormItem>
               )}
-            />
+            /> */}
+            <FormField
+              control={form.control}
+              name="active"
+              render={({ field }) => (
+                <FormItem className="flex items-center space-x-4 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <Label htmlFor="active" className="pl-4">
+                    Is Active
+                    <span className="pl-1 text-sm font-normal text-muted-foreground">
+                      inactive categories are not visible to public
+                    </span>
+                  </Label>
+                </FormItem>
+              )}
+            ></FormField>
           </div>
 
           <div className="pt-8">

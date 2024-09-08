@@ -7,11 +7,13 @@ export async function POST(request: Request) {
     const formData = await request.formData();
 
     const data = {
-      name: formData.get("name"),
-      parent_id: formData.get("parent_id"),
-      identifier: formData.get("identifier"),
+      name: formData.get("name")?.toString().trim(),
+      parent_id:
+        formData.get("parent_id") === "" ? null : formData.get("parent_id"),
+      identifier: formData.get("identifier")?.toString().trim(),
       has_child: formData.get("has_child") === "true" ? true : false,
       active: formData.get("active"),
+      short_description: formData.get("short_description")?.toString().trim(),
     };
 
     console.log(data);

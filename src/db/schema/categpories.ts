@@ -19,7 +19,7 @@ export const categories = pgTable(
     has_child: boolean("has_child").default(true),
     active: boolean("active").default(true),
 
-    short_description: text("description"),
+    short_description: text("short_description"),
 
     ...lifecycleDates,
   }

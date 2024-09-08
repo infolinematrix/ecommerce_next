@@ -1,6 +1,6 @@
 {
-  "id": "b4aeba5b-1300-4302-b3b6-6704cf10522c",
-  "prevId": "4895769a-71ef-45e4-adf7-6cf69efd3d0b",
+  "id": "87437a0c-64cc-42bb-ad1e-ed4d50c7d1e8",
+  "prevId": "c8a6d6ff-578a-48b4-a3ba-b02b8ebf6837",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -15,11 +15,57 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "identifier": {
+          "name": "identifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "has_child": {
+          "name": "has_child",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "short_description": {
+          "name": "short_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "current_timestamp"
         }
       },
       "indexes": {},
@@ -31,6 +77,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "name"
+          ]
+        },
+        "categories_identifier_unique": {
+          "name": "categories_identifier_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "identifier"
           ]
         }
       }

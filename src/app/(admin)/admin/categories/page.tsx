@@ -29,6 +29,7 @@ interface Props {
 
 export default async function CategoriesPage({ searchParams }: Props) {
   const data = await get_parents(searchParams.parent);
+  console.log(data);
 
   return (
     <Shell variant="sidebar" className="overflow-hidden">

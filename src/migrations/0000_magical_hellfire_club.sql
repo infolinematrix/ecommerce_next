@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "categories" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"parent_id" uuid,
 	"name" text NOT NULL,
 	"identifier" text NOT NULL,
@@ -18,9 +18,3 @@ CREATE TABLE IF NOT EXISTS "todos" (
 	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
 	"updated_at" timestamp
 );
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "categories" ADD CONSTRAINT "fkey_parent_id" FOREIGN KEY ("parent_id") REFERENCES "public"."categories"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;

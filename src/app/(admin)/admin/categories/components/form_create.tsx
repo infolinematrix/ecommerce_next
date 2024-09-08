@@ -30,24 +30,17 @@ import { CameraIcon, ImageIcon } from "@radix-ui/react-icons";
 import api, { fetcher } from "@/lib/apiClient";
 import { createCategorySchema } from "../types/category_types";
 
-// const formSchema = z.object({
-//   name: z.string().min(1).max(180),
-//   identifier: z.string().min(1).max(180),
-//   short_description: z.string().min(3).max(255),
-//   has_child: z.boolean(),
-//   active: z.boolean(),
-// });
-
 export default function CreateForm(props: { parentId: string | undefined }) {
   const form = useForm<z.infer<typeof createCategorySchema>>({
     resolver: zodResolver(createCategorySchema),
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
+      parent_id: props.parentId,
       name: "",
       identifier: "",
       short_description: "",
-      has_child: "false",
+      has_child: "true",
       active: true,
     },
   });
@@ -83,7 +76,17 @@ export default function CreateForm(props: { parentId: string | undefined }) {
             <span className="text-primary font-medium"></span>
           </p>
 
-          <Input type="text" defaultValue={props.parentId} name="parent_id" />
+          <FormField
+            control={form.control}
+            name="parent_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
           <div className="flex flex-row gap-4 justify-between">
             <div className="w-full">

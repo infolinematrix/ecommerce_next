@@ -2,7 +2,7 @@
 
 import { lifecycleDates } from "./utils";
 import { relations } from "drizzle-orm";
-import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { boolean, foreignKey, pgTable, text, uuid } from "drizzle-orm/pg-core";
 
 export const categories = pgTable(
   "categories",
@@ -22,26 +22,26 @@ export const categories = pgTable(
     short_description: text("short_description"),
 
     ...lifecycleDates,
-  }
-  // (table) => ({
-  //   parentReference: foreignKey({
-  //     columns: [table.parent_id],
-  //     foreignColumns: [table.id],
-  //     name: "fkey_parent_id",
-  //   }).onDelete("cascade"),
-  // })
+  },
+  (table) => ({
+    parentReference: foreignKey({
+      columns: [table.parent_id],
+      foreignColumns: [table.id],
+      name: "fkey_parent_id",
+    }).onDelete("cascade"),
+  })
 );
 
-// export const categoriesRelations = relations(categories, ({ one, many }) => ({
-//   parentCategory: one(categories, {
-//     fields: [categories.parent_id],
-//     references: [categories.id],
-//     relationName: "subCategories",
-//   }),
-//   //...
-//   subCategories: many(categories, {
-//     relationName: "subCategories",
-//   }),
-// }));
+export const categoriesRelations = relations(categories, ({ one, many }) => ({
+  parentCategory: one(categories, {
+    fields: [categories.parent_id],
+    references: [categories.id],
+    relationName: "subCategories",
+  }),
+  //...
+  subCategories: many(categories, {
+    relationName: "subCategories",
+  }),
+}));
 
 export type CategoryType = typeof categories.$inferSelect;

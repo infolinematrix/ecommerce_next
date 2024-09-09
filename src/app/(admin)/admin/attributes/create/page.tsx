@@ -7,16 +7,16 @@ import { Shell } from "@/app/(admin)/components/shell";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import Link from "next/link";
-import { DataTable } from "../../categories/page";
+
 import CreateForm from "../components/form_create";
 import CreateAttributeForm from "../components/form_create";
 
-interface Props {
-  param: string;
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+// interface Props {
+//   param: string;
+//   searchParams: { [key: string]: string | string[] | undefined };
+// }
 
-export default function Page({ param, searchParams }: Props) {
+export default function Page() {
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">

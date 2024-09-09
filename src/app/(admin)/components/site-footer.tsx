@@ -1,12 +1,12 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
-import { JoinNewsletterForm } from "@/components/join-newsletter-form"
-import { ModeToggle } from "@/components/layouts/mode-toggle"
-import { Shell } from "@/components/shell"
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
+import { Shell } from "./shell";
+// import { JoinNewsletterForm } from "@/components/join-newsletter-form"
+// import { ModeToggle } from "@/components/layouts/mode-toggle"
 
 export function SiteFooter() {
   return (
@@ -21,7 +21,7 @@ export function SiteFooter() {
             </Link>
           </section>
           <section className="grid flex-1 grid-cols-1 gap-10 xxs:grid-cols-2 sm:grid-cols-4">
-            {siteConfig.footerNav.map((item) => (
+            {/* {siteConfig.footerNav.map((item) => (
               <div key={item.title} className="space-y-3">
                 <h4 className="text-base font-medium">{item.title}</h4>
                 <ul className="space-y-2.5">
@@ -40,13 +40,13 @@ export function SiteFooter() {
                   ))}
                 </ul>
               </div>
-            ))}
+            ))} */}
           </section>
           <section className="space-y-3">
             <h4 className="text-base font-medium">
               Subscribe to our newsletter
             </h4>
-            <JoinNewsletterForm />
+            {/* <JoinNewsletterForm /> */}
           </section>
         </section>
         <section className="flex items-center space-x-4">
@@ -78,10 +78,10 @@ export function SiteFooter() {
               <Icons.gitHub className="size-4" aria-hidden="true" />
               <span className="sr-only">GitHub</span>
             </Link>
-            <ModeToggle />
+            {/* <ModeToggle /> */}
           </div>
         </section>
       </Shell>
     </footer>
-  )
+  );
 }

@@ -19,14 +19,13 @@ import {
 } from "@/components/ui/table";
 import { get_parents } from "@/lib/actions/category";
 import { HomeIcon } from "@radix-ui/react-icons";
-import { DataTable } from "../categories/page";
 
-interface Props {
-  param: string;
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+// interface Props {
+//   param: string;
+//   searchParams: { [key: string]: string | string[] | undefined };
+// }
 
-export default function Page({ param, searchParams }: Props) {
+export default function Page() {
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">
@@ -52,7 +51,7 @@ export default function Page({ param, searchParams }: Props) {
         ) : (
           <div>Loading....</div>
         )} */}
-            <DataTable data />
+            {/* <DataTable data /> */}
           </ScrollArea>
         </div>
         <div className="flex w-1/3">sad</div>

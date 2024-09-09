@@ -62,7 +62,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
               <div>Loading....</div>
             )} */}
             <div className="pt-4">
-              <DataTable data={data} parent={searchParams.parent} />
+              <TableData data={data} />
             </div>
           </ScrollArea>
         </div>
@@ -72,7 +72,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
   );
 }
 
-export const DataTable = ({ data }: any, parent: string | undefined) => {
+const TableData = ({ data }: any) => {
   return (
     <>
       <Table>

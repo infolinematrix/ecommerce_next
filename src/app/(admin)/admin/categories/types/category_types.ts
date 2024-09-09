@@ -17,6 +17,7 @@ export const createCategorySchema = z.object({
 });
 
 export const updateCategorySchema = z.object({
+  id: z.string(),
   name: z.string().min(1).max(180),
   identifier: z.string().min(1).max(180),
   short_description: z.string().min(3).max(255),

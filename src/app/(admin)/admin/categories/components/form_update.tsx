@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
+import api from "@/lib/apiClient";
 
 export default function UpdateForm({ category }: any) {
   const form = useForm<z.infer<typeof updateCategorySchema>>({
@@ -24,6 +25,7 @@ export default function UpdateForm({ category }: any) {
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
+      id: category.id,
       name: category.name,
       identifier: category.identifier,
       short_description: category.short_description,
@@ -31,16 +33,42 @@ export default function UpdateForm({ category }: any) {
     },
   });
 
-  const onSubmit = async (formData: z.infer<typeof updateCategorySchema>) => {};
+  const onSubmit = async (formData: z.infer<typeof updateCategorySchema>) => {
+    //-parse zod schema
+    const monkeyParse = updateCategorySchema.safeParse(formData);
+    //--validate zod schema
+    if (!monkeyParse.success) {
+      console.log("----VALIDATION ERROR");
+      return;
+    }
+
+    const data = monkeyParse.data;
+
+    // console.log(data);
+    const response = await api.put(`/admin/categories/update/api`, data, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    if (response.data.success) console.log(alert("Successfull"));
+  };
 
   return (
     <div>
       <Form {...form}>
-        <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
+        <form noValidate onSubmit={form.handleSubmit(onSubmit)} method="PUT">
           <p className="pb-5 text-muted-foreground">
             You are creating under{" "}
             <span className="text-primary font-medium"></span>
           </p>
+          <FormItem hidden>
+            <FormField
+              control={form.control}
+              name="id"
+              render={({ field }) => <Input {...field}></Input>}
+            ></FormField>
+          </FormItem>
 
           <div className="flex flex-row gap-4 justify-between">
             <div className="w-full">
@@ -141,7 +169,7 @@ export default function UpdateForm({ category }: any) {
             >
               Reset
             </Button>
-            <Button type="submit">Create</Button>
+            <Button type="submit">Save</Button>
           </div>
         </form>
       </Form>

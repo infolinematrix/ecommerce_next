@@ -47,3 +47,24 @@ export const create_category = async (data: any) => {
     return error;
   }
 };
+
+export const categoryDeleteById = async (id: string) => {
+  try {
+    await db.delete(categories).where(eq(categories.id, id));
+  } catch (error) {
+    return false;
+  }
+  return true;
+};
+
+export const categoryUpdateById = async (id: string, data: any) => {
+  try {
+    console.log(id);
+
+    await db.update(categories).set(data).where(eq(categories.id, id));
+  } catch (error) {
+    return false;
+  }
+
+  return true;
+};

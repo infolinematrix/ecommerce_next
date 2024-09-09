@@ -1,8 +1,8 @@
 // import { generateId } from "@/lib/id";
 
-import { lifecycleDates } from "./utils";
 import { relations } from "drizzle-orm";
 import { boolean, foreignKey, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { lifecycleDates } from "../utils";
 
 export const categories = pgTable(
   "categories",

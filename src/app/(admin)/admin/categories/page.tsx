@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table";
 import { get_parents } from "@/lib/actions/category";
 import { HomeIcon } from "@radix-ui/react-icons";
-import { CategoryType } from "@/db/schema/categories";
+import { CategoryType } from "@/db/schema/categpories";
 
 interface Props {
   // param: string;

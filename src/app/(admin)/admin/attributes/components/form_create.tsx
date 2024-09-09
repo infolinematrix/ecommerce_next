@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { slugify } from "@/lib/utils";
+import { dummyList, slugify } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@radix-ui/react-label";
 import {
@@ -46,34 +46,23 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { attributeCreateSchema } from "../types/attribute_types";
 
-const formSchema = z.object({
-  name: z.string().min(1).max(180),
-  identifier: z.string().min(1).max(180),
-  short_description: z.string().min(3).max(255),
-  has_child: z.string().default("true"),
-  active: z.string().default("true"),
-});
-
-function onSubmit(values: z.infer<typeof formSchema>) {
+function onSubmit(values: z.infer<typeof attributeCreateSchema>) {
   console.log(values);
 }
 
 export default function CreateAttributeForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof attributeCreateSchema>>({
+    resolver: zodResolver(attributeCreateSchema),
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
       name: "",
       identifier: "",
-      short_description: "",
-      has_child: "true",
+      custom_name: "",
     },
   });
-  const data = Array.from({ length: 10 }).map(
-    (_, i, a) => `v1.2.0-beta.${a.length - i}`
-  );
 
   return (
     <>
@@ -91,7 +80,7 @@ export default function CreateAttributeForm() {
                       <Input
                         placeholder="Enter name"
                         {...field}
-                        onChange={(ev) => {
+                        onChange={(ev: any) => {
                           field.onChange(ev);
                           form.setValue("identifier", slugify(ev.target.value));
                         }}
@@ -129,7 +118,7 @@ export default function CreateAttributeForm() {
             <div className="w-full">
               <FormField
                 control={form.control}
-                name="name"
+                name="input_type"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Input</FormLabel>
@@ -159,38 +148,50 @@ export default function CreateAttributeForm() {
               />
             </div>
 
-            <div className="flex w-full max-w-sm items-center space-x-2">
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="identifier"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Values</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="Email" />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-
+            <div className="w-full">
               <FormField
                 control={form.control}
-                name="identifier"
+                name="custom_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>...</FormLabel>
+                    <FormLabel>Custom name</FormLabel>
                     <FormControl>
-                      <Button type="submit">Add</Button>
+                      <Input placeholder="Custom Name" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
               />
             </div>
           </div>
+          <div className="flex flex-row gap-4 pt-8">
+            <Button
+              type="button"
+              variant={"secondary"}
+              onClick={() => form.reset()}
+            >
+              Reset
+            </Button>
+            <Button type="submit">Create</Button>
+          </div>
+        </form>
+        <div className="mt-8">
+          <Card className="p-4">
+            <form>
+              <div className="flex flex-row gap-4 justify-normal">
+                <div className="1w-full">
+                  <FormItem>
+                    <Input name="value"></Input>
+                  </FormItem>
+                </div>
+                <div className="w-fit">
+                  <Button>Add</Button>
+                </div>
+              </div>
+            </form>
+          </Card>
+        </div>
 
-          <div className="pt-4">
+        {/* <div className="pt-4">
             <div className="h-70  rounded-md border">
               <Table>
                 <TableHeader>
@@ -201,7 +202,7 @@ export default function CreateAttributeForm() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {data.map(() => {
+                  {dummyList.map(() => {
                     return (
                       <>
                         <TableRow>
@@ -220,19 +221,7 @@ export default function CreateAttributeForm() {
                 </TableBody>
               </Table>
             </div>
-          </div>
-
-          <div className="flex flex-row gap-4 pt-8">
-            <Button
-              type="button"
-              variant={"secondary"}
-              onClick={() => form.reset()}
-            >
-              Reset
-            </Button>
-            <Button type="submit">Create</Button>
-          </div>
-        </form>
+          </div> */}
       </Form>
     </>
   );

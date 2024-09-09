@@ -1,15 +1,67 @@
 import { db } from "@/db";
 import { attributes } from "@/db/schema/attributes";
 import { eq } from "drizzle-orm";
-import { serial } from "drizzle-orm/pg-core";
+
 export const getAttributes = async () => {
   try {
-    const data = db.select().from(attributes).where(eq(attributes.status, 51));
+    const data = await db
+      .select()
+      .from(attributes)
+      .where(eq(attributes.status, 51));
     return data;
   } catch (error) {
     console.log("Action Error", error);
-    return false;
+    return null;
   }
+};
 
-  return true;
+export const getAttributeById = async (id: string) => {
+  try {
+    const data = await db
+      .select()
+      .from(attributes)
+      .where(eq(attributes.id, id));
+    return data;
+  } catch (error) {
+    console.log("Action Error", error);
+    return null;
+  }
+};
+export const updateAttributeById = async (id: string, data: any) => {
+  try {
+    await db.update(attributes).set(data).where(eq(attributes.id, id));
+  } catch (error) {
+    console.log("Action Error", error);
+    return null;
+  }
+};
+export const deleteAttributeById = async (id: string) => {
+  try {
+    await db.delete(attributes).where(eq(attributes.id, id));
+  } catch (error) {
+    console.log("Action Error", error);
+    return null;
+  }
+};
+
+export const getValues = async () => {
+  try {
+  } catch (error) {
+    console.log("Action Error", error);
+    return null;
+  }
+};
+export const createValue = async () => {
+  try {
+  } catch (error) {
+    console.log("Action Error", error);
+    return null;
+  }
+};
+export const deleteValue = async (id: string) => {
+  try {
+  } catch (error) {
+    console.log("Action Error", error);
+    return null;
+  }
 };

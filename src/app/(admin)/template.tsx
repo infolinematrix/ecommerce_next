@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { DashboardHeader } from "./components/dashboard-header";
 import { DashboardSidebar } from "./components/dashboard-sidebar";
 import { DashboardSidebarSheet } from "./components/dashboard-sidebar-sheet";
@@ -8,6 +9,7 @@ import {
 } from "./components/page-header";
 import { Shell } from "./components/shell";
 import { SidebarProvider } from "./components/sidebar-provider";
+import Loading from "./loading";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
@@ -37,7 +39,9 @@ export default function Template({ children }: { children: React.ReactNode }) {
               </DashboardSidebar>
             </DashboardSidebarSheet>
           </DashboardHeader>
-          <main className="flex-1 overflow-hidden p-4">{children}</main>
+          <main className="flex-1 overflow-hidden p-4">
+            <Suspense fallback={<Loading />}>{children}</Suspense>
+          </main>
         </div>
       </div>
     </SidebarProvider>

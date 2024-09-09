@@ -11,12 +11,7 @@ import Link from "next/link";
 import CreateForm from "../components/form_create";
 import CreateAttributeForm from "../components/form_create";
 
-// interface Props {
-//   param: string;
-//   searchParams: { [key: string]: string | string[] | undefined };
-// }
-
-export default function Page() {
+export default function CreatePage() {
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">

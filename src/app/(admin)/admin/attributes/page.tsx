@@ -19,13 +19,17 @@ import {
 } from "@/components/ui/table";
 import { get_parents } from "@/lib/actions/category";
 import { HomeIcon } from "@radix-ui/react-icons";
+import { getAttributes } from "@/lib/actions/attributes";
 
 // interface Props {
 //   param: string;
 //   searchParams: { [key: string]: string | string[] | undefined };
 // }
 
-export default function Page() {
+export default async function AttributePage() {
+  const data = await getAttributes();
+  data ?? console.log("NO DATA");
+
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">
@@ -41,16 +45,17 @@ export default function Page() {
                 </>
               </PageHeader>
               <>
-                <Link href={"#"}>
+                <Link href={"/admin/attributes/create"}>
                   <Button variant={"secondary"}>Create new </Button>
                 </Link>
               </>
             </div>
-            {/* {data && data.length > 0 ? (
-          <DataTable data />
-        ) : (
-          <div>Loading....</div>
-        )} */}
+            {data && data.length > 0 ? (
+              // <DataTable data />
+              <></>
+            ) : (
+              <div>No Data....</div>
+            )}
             {/* <DataTable data /> */}
           </ScrollArea>
         </div>

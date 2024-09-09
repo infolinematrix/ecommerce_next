@@ -1,3 +1,22 @@
+DO $$ BEGIN
+ CREATE TYPE "public"."attribute_type" AS ENUM('TEXT', 'TEXTBOX', 'SELECT', 'SELECT-MULTIPLE', 'OPTIONS');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "attributes" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" text NOT NULL,
+	"identifier" text NOT NULL,
+	"custom_name" text,
+	"input_type" "attribute_type" DEFAULT 'TEXT' NOT NULL,
+	"status" integer DEFAULT 51,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT current_timestamp,
+	CONSTRAINT "attributes_name_unique" UNIQUE("name"),
+	CONSTRAINT "attributes_identifier_unique" UNIQUE("identifier")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "categories" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"parent_id" uuid,
@@ -10,13 +29,6 @@ CREATE TABLE IF NOT EXISTS "categories" (
 	"updated_at" timestamp DEFAULT current_timestamp,
 	CONSTRAINT "categories_name_unique" UNIQUE("name"),
 	CONSTRAINT "categories_identifier_unique" UNIQUE("identifier")
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "todos" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"text" text,
-	"created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" timestamp
 );
 --> statement-breakpoint
 DO $$ BEGIN

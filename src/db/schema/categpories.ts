@@ -32,16 +32,16 @@ export const categories = pgTable(
   })
 );
 
-export const categoriesRelations = relations(categories, ({ one, many }) => ({
-  parentCategory: one(categories, {
-    fields: [categories.parent_id],
-    references: [categories.id],
-    relationName: "subCategories",
-  }),
-  //...
-  subCategories: many(categories, {
-    relationName: "subCategories",
-  }),
-}));
+// export const categoriesRelations = relations(categories, ({ one, many }) => ({
+//   parentCategory: one(categories, {
+//     fields: [categories.parent_id],
+//     references: [categories.id],
+//     relationName: "subCategories",
+//   }),
+//   //...
+//   subCategories: many(categories, {
+//     relationName: "subCategories",
+//   }),
+// }));
 
-export type CategoryType = typeof categories.$inferSelect;
+// export type CategoryType = typeof categories.$inferSelect;

@@ -1,6 +1,7 @@
 import { createCategorySchema } from "@/app/(admin)/admin/categories/types/category_types";
 import { db } from "@/db";
-import { categories } from "@/db/schema/categpories";
+import { categories } from "@/db/schemas/categories";
+
 import { eq, isNull } from "drizzle-orm";
 
 export const get_parents = async (parent: string | undefined) => {
@@ -22,13 +23,14 @@ export const get_parents = async (parent: string | undefined) => {
   }
 };
 
-export const get_category = async (parent: string) => {
+export const categoryById = async (id: string) => {
   try {
     const data = await db
       .select()
       .from(categories)
-      .where(eq(categories.parent_id, parent));
-    return data;
+      .where(eq(categories.id, id));
+
+    return data[0];
   } catch (error) {
     console.log("Action Error: ", error);
   }

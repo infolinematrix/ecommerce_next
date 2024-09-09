@@ -36,7 +36,7 @@ export default function CreateForm(props: { parentId: string | undefined }) {
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
-      parent_id: props.parentId,
+      parent_id: props.parentId || "",
       name: "",
       identifier: "",
       short_description: "",
@@ -80,7 +80,7 @@ export default function CreateForm(props: { parentId: string | undefined }) {
             control={form.control}
             name="parent_id"
             render={({ field }) => (
-              <FormItem>
+              <FormItem hidden>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

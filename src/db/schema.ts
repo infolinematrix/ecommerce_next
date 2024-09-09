@@ -1,7 +1,7 @@
 import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
-import { demo } from "./schema/demo";
-import { todos } from "./schema/todo";
-import { categories } from "./schema/categpories";
+import { demo } from "./schemas/demo";
+import { todos } from "./schemas/todo";
+import { categories } from "./schemas/categories";
 
 export const schema = {
   ...todos,

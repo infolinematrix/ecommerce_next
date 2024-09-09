@@ -15,3 +15,10 @@ export const createCategorySchema = z.object({
   has_child: z.string(),
   active: z.boolean(),
 });
+
+export const updateCategorySchema = z.object({
+  name: z.string().min(1).max(180),
+  identifier: z.string().min(1).max(180),
+  short_description: z.string().min(3).max(255),
+  active: z.boolean(),
+});

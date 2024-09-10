@@ -19,12 +19,19 @@ import {
 } from "@/components/ui/table";
 import { get_parents } from "@/lib/actions/category";
 import { HomeIcon } from "@radix-ui/react-icons";
-import { getAttributes } from "@/lib/actions/attributes";
+import { getAttributes, deleteAttributeById } from "@/lib/actions/attributes";
+import { AttributeType } from "@/db/schema/attributes";
+import { DeleteAttributeButton } from "./components/delete_button";
 
 // interface Props {
 //   param: string;
 //   searchParams: { [key: string]: string | string[] | undefined };
 // }
+
+// const deleteAttr = async () => {
+//   "use server";
+//   console.log("====================");
+// };
 
 export default async function AttributePage() {
   const data = await getAttributes();
@@ -50,13 +57,17 @@ export default async function AttributePage() {
                 </Link>
               </>
             </div>
-            {data && data.length > 0 ? (
-              // <DataTable data />
-              <></>
-            ) : (
-              <div>No Data....</div>
-            )}
-            {/* <DataTable data /> */}
+
+            <div className="pt-4">
+              {data && data.length > 0 ? (
+                <>
+                  <TableData data={data} />
+                </>
+              ) : (
+                <div>No Data....</div>
+              )}
+              {/* <DataTable data /> */}
+            </div>
           </ScrollArea>
         </div>
         <div className="flex w-1/3">sad</div>
@@ -64,3 +75,72 @@ export default async function AttributePage() {
     </Shell>
   );
 }
+
+const TableData = ({ data }: any) => {
+  return (
+    <>
+      <Table>
+        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Input</TableHead>
+            <TableHead>Custom name</TableHead>
+            <TableHead className="text-right w-[100px]">Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((attribute: AttributeType) => (
+            <TableRow key={attribute.id}>
+              <TableCell className="font-medium">
+                <span>{attribute.name}</span>
+              </TableCell>
+              <TableCell>
+                <span>{attribute.input_type}</span>
+              </TableCell>
+              <TableCell>
+                {attribute.custom_name == ""
+                  ? attribute.name
+                  : attribute.custom_name}
+              </TableCell>
+              <TableCell className="text-right">
+                {/* <Button
+                  asChild
+                  variant={"secondary"}
+                  className=""
+                  type="submit"
+                  onClick={(ev) => {
+                    console.log("-------------");
+                  }}
+                >
+                  <HomeIcon color="primary"></HomeIcon>
+                </Button> */}
+                <DeleteAttributeButton id={attribute.id} />
+                {/* <Button variant={"ghost"}>
+                    <HomeIcon></HomeIcon>
+                  </Button> */}
+
+                {/* <Button asChild variant={"secondary"} className="">
+                  <Link
+                    href={{
+                      pathname: "/admin/attribute/update",
+                      query: { id: attribute.id },
+                    }}
+                  >
+                    <HomeIcon></HomeIcon>
+                  </Link>
+                </Button> */}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={3}>Total</TableCell>
+            <TableCell className="text-right">$2,500.00</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </>
+  );
+};

@@ -10,11 +10,11 @@ import {
 import { lifecycleDates } from "../utils";
 
 export const inputEnum = pgEnum("attribute_type", [
-  "TEXT",
   "TEXTBOX",
   "SELECT",
   "SELECT-MULTIPLE",
   "OPTIONS",
+  "TEXTAREA",
 ]);
 
 export const attributes = pgTable("attributes", {
@@ -22,7 +22,7 @@ export const attributes = pgTable("attributes", {
   name: text("name").notNull().unique(),
   identifier: text("identifier").notNull().unique(),
   custom_name: text("custom_name"),
-  input_type: inputEnum("input_type").notNull().default("TEXT"),
+  input_type: inputEnum("input_type").notNull().default("TEXTBOX"),
   status: integer("status").default(51),
   ...lifecycleDates,
 });

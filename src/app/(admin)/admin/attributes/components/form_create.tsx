@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { any, string, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -46,23 +46,92 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { attributeCreateSchema } from "../types/attribute_types";
-
-function onSubmit(values: z.infer<typeof attributeCreateSchema>) {
-  console.log(values);
-}
+import {
+  AttributeCreateSchema,
+  AttributeValueCreateSchema,
+} from "../types/attribute_types";
+import { attributeInputTypes } from "@/lib/constants";
+import api from "@/lib/apiClient";
+import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
 
 export default function CreateAttributeForm() {
-  const form = useForm<z.infer<typeof attributeCreateSchema>>({
-    resolver: zodResolver(attributeCreateSchema),
+  const [showValue, setshowValue] = useState(false);
+
+  const form = useForm<z.infer<typeof AttributeCreateSchema>>({
+    resolver: zodResolver(AttributeCreateSchema),
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
       name: "",
       identifier: "",
       custom_name: "",
+      input_type: "",
     },
   });
+
+  const valueForm = useForm<z.infer<typeof AttributeValueCreateSchema>>({
+    resolver: zodResolver(AttributeValueCreateSchema),
+    mode: "onChange",
+    shouldUnregister: false,
+    defaultValues: {
+      // attribute_id: "",
+      attribute_value: "",
+    },
+  });
+
+  async function onSubmit(formData: z.infer<typeof AttributeCreateSchema>) {
+    //-parse zod schema
+    const monkeyParse = AttributeCreateSchema.safeParse(formData);
+    //--validate zod schema
+    if (!monkeyParse.success) {
+      alert("----VALIDATION ERROR");
+      return;
+    }
+
+    const formdata = monkeyParse.data;
+    const data = {
+      attribute: formdata,
+      attribute_values: values,
+    };
+    // console.log(data);
+
+    const response = await api.post(`/admin/attributes/create/api`, data, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    // console.log("===========", response.data.insertedId);
+  }
+
+  const showValueInput = (ev: string) => {
+    setValues([]);
+
+    ["TEXTBOX", "TEXTAREA"].includes(ev)
+      ? setshowValue(false)
+      : setshowValue(true);
+  };
+
+  const [values, setValues] = useState<string[]>([]);
+
+  const addValue = () => {
+    const val = valueForm.getValues("attribute_value").toString().trim();
+
+    if (!values.includes(val) && val != "") {
+      setValues([...values, val]);
+      valueForm.reset();
+    } else {
+      alert("Invalid..");
+    }
+  };
+
+  const deleteValue = (index: number) => {
+    const action = confirm("Are you sure");
+    if (action) {
+      setValues([...values.slice(0, index), ...values.slice(index + 1)]);
+    }
+  };
 
   return (
     <>
@@ -123,21 +192,21 @@ export default function CreateAttributeForm() {
                   <FormItem>
                     <FormLabel>Input</FormLabel>
                     <FormControl>
-                      <Select>
+                      <Select
+                        onValueChange={(ev) => {
+                          field.onChange(ev);
+                          showValueInput(ev);
+                        }}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select input" />
                         </SelectTrigger>
-
-                        <SelectContent className="space-y-2">
-                          <SelectGroup>
-                            <SelectItem value="text">TextBox</SelectItem>
-                            <SelectItem value="select">Select</SelectItem>
-                            <SelectItem value="select-multiple">
-                              Select(Multiple)
+                        <SelectContent>
+                          {attributeInputTypes.map((item) => (
+                            <SelectItem key={item.value} value={item.value}>
+                              {item.label}
                             </SelectItem>
-                            <SelectItem value="textare">Textare</SelectItem>
-                            <SelectItem value="options">Option</SelectItem>
-                          </SelectGroup>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -174,55 +243,66 @@ export default function CreateAttributeForm() {
             <Button type="submit">Create</Button>
           </div>
         </form>
-        <div className="mt-8">
-          <Card className="p-4">
-            <form>
-              <div className="flex flex-row gap-4 justify-normal">
-                <div className="1w-full">
-                  <FormItem>
-                    <Input name="value"></Input>
-                  </FormItem>
+      </Form>
+
+      <div className="mt-8">
+        {showValue == true ? (
+          <>
+            <Form {...valueForm}>
+              <div className="flex flex-row gap-4 justify-end">
+                <div className="w-[300px]">
+                  <FormField
+                    control={valueForm.control}
+                    name="attribute_value"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input placeholder="Enter value" {...field} />
+                        </FormControl>
+                        <FormDescription></FormDescription>
+                        {/* <FormMessage /> */}
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div className="w-fit">
-                  <Button>Add</Button>
+                  <Button type="button" onClick={addValue}>
+                    Add
+                  </Button>
                 </div>
               </div>
-            </form>
-          </Card>
-        </div>
+            </Form>
+            <Separator className="my-4" />
+          </>
+        ) : (
+          <></>
+        )}
 
-        {/* <div className="pt-4">
-            <div className="h-70  rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">Invoice</TableHead>
-
-                    <TableHead className="text-right">Amount</TableHead>
+        {values.length > 0 ? (
+          <>
+            <Table>
+              <TableBody>
+                {values.map((value: string, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell>{value}</TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        asChild
+                        variant={"secondary"}
+                        onClick={(ev) => deleteValue(index)}
+                      >
+                        <HomeIcon></HomeIcon>
+                      </Button>
+                    </TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {dummyList.map(() => {
-                    return (
-                      <>
-                        <TableRow>
-                          <TableCell>adasd</TableCell>
-                          <TableCell className="text-right">
-                            <Button asChild variant={"secondary"}>
-                              <Link href="#">
-                                <HomeIcon></HomeIcon>
-                              </Link>
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      </>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          </div> */}
-      </Form>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
     </>
   );
 }

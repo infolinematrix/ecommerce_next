@@ -55,6 +55,8 @@ import api from "@/lib/apiClient";
 import { useState } from "react";
 
 export default function CreateAttributeForm() {
+  const [showValue, setshowValue] = useState(false);
+
   const form = useForm<z.infer<typeof attributeCreateSchema>>({
     resolver: zodResolver(attributeCreateSchema),
     mode: "onChange",
@@ -97,20 +99,20 @@ export default function CreateAttributeForm() {
     console.log(data);
   }
 
-  const [showValue, setshowValue] = useState(false);
-  const [values, setValues] = useState([]);
-
   const showValueInput = (ev: string) => {
     ["TEXTBOX", "TEXTAREA"].includes(ev)
       ? setshowValue(false)
       : setshowValue(true);
   };
 
+  const [values, setValues] = useState(string[]);
+
   const addValue = () => {
     const val = valueForm.getValues("attribute_value").toString().trim();
 
-    const v = val.toString();
-    setValues([...values, v]);
+    // const v = val.toString();
+    values.push(val);
+    // setValues([...values, v]);
     // values.push(v);
     // setValues((state) => {
     //   state.push(v);

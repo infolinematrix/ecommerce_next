@@ -5,8 +5,8 @@ import { categories } from "./schemas/categories";
 import { attributes } from "./schema/attributes";
 
 export const schema = {
-  ...todos,
-  ...demo,
-  ...categories,
-  ...attributes,
+  todos,
+  demo,
+  categories,
+  attributes,
 };

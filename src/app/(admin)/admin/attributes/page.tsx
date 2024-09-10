@@ -59,14 +59,7 @@ export default async function AttributePage() {
             </div>
 
             <div className="pt-4">
-              {data && data.length > 0 ? (
-                <>
-                  <TableData data={data} />
-                </>
-              ) : (
-                <div>No Data....</div>
-              )}
-              {/* <DataTable data /> */}
+              <TableData data={data} />
             </div>
           </ScrollArea>
         </div>
@@ -93,7 +86,14 @@ const TableData = ({ data }: any) => {
           {data.map((attribute: AttributeType) => (
             <TableRow key={attribute.id}>
               <TableCell className="font-medium">
-                <span>{attribute.name}</span>
+                <Link
+                  href={{
+                    pathname: "/admin/attributes/update",
+                    query: { id: attribute.id },
+                  }}
+                >
+                  <span>{attribute.name}</span>
+                </Link>
               </TableCell>
               <TableCell>
                 <span>{attribute.input_type}</span>
@@ -104,42 +104,17 @@ const TableData = ({ data }: any) => {
                   : attribute.custom_name}
               </TableCell>
               <TableCell className="text-right">
-                {/* <Button
-                  asChild
-                  variant={"secondary"}
-                  className=""
-                  type="submit"
-                  onClick={(ev) => {
-                    console.log("-------------");
-                  }}
-                >
-                  <HomeIcon color="primary"></HomeIcon>
-                </Button> */}
                 <DeleteAttributeButton id={attribute.id} />
-                {/* <Button variant={"ghost"}>
-                    <HomeIcon></HomeIcon>
-                  </Button> */}
-
-                {/* <Button asChild variant={"secondary"} className="">
-                  <Link
-                    href={{
-                      pathname: "/admin/attribute/update",
-                      query: { id: attribute.id },
-                    }}
-                  >
-                    <HomeIcon></HomeIcon>
-                  </Link>
-                </Button> */}
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
+        {/* <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>Total</TableCell>
             <TableCell className="text-right">$2,500.00</TableCell>
           </TableRow>
-        </TableFooter>
+        </TableFooter> */}
       </Table>
     </>
   );

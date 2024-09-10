@@ -193,6 +193,7 @@ export default function CreateAttributeForm() {
                     <FormLabel>Input</FormLabel>
                     <FormControl>
                       <Select
+                        {...field}
                         onValueChange={(ev) => {
                           field.onChange(ev);
                           showValueInput(ev);

@@ -14,12 +14,10 @@ export const DeleteAttributeButton = ({ id }: any) => {
   return (
     <>
       <form>
-        {/* <input value={id} name="id" /> */}
         <Button
           variant={"ghost"}
           onClick={(ev: any) => {
             ev.preventDefault();
-            console.log("HDDDDDDDDDDD", id);
             deleteAttributeById(id);
           }}
         >

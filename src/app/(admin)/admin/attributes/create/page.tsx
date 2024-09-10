@@ -22,7 +22,7 @@ export default function CreatePage() {
                 <>
                   <PageHeaderHeading size="md">Create</PageHeaderHeading>
                   <PageHeaderDescription size="sm">
-                    Manage your account settings
+                    Manage your product attributes settings
                   </PageHeaderDescription>
                 </>
               </PageHeader>

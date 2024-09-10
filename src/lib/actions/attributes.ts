@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { attributes } from "@/db/schema/attributes";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export const getAttributes = async () => {
   try {
@@ -38,6 +39,16 @@ export const updateAttributeById = async (id: string, data: any) => {
 export const deleteAttributeById = async (id: string) => {
   try {
     await db.delete(attributes).where(eq(attributes.id, id));
+  } catch (error) {
+    console.log("Action Error", error);
+    return null;
+  }
+};
+export const createAttribute = async (data: any) => {
+  try {
+    await db.insert(attributes).values(data);
+    revalidatePath("getAttributes");
+    return true;
   } catch (error) {
     console.log("Action Error", error);
     return null;

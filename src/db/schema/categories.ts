@@ -44,4 +44,4 @@ export const categories = pgTable(
 //   }),
 // }));
 
-// export type CategoryType = typeof categories.$inferSelect;
+export type CategoryType = typeof categories.$inferSelect;

@@ -39,7 +39,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
               </DashboardSidebar>
             </DashboardSidebarSheet>
           </DashboardHeader>
-          <main className="flex-1 overflow-hidden p-4">
+          <main className="flex-1 overflow-hidden p-6">
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </main>
         </div>

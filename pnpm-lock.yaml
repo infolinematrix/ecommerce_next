@@ -53,6 +53,9 @@ importers:
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
+      clax:
+        specifier: ^0.0.6
+        version: 0.0.6
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1211,6 +1214,9 @@ packages:
 
   class-variance-authority@0.7.0:
     resolution: {integrity: sha512-jFI8IQw4hczaL4ALINxqLEXQbWcNjoSkloa4IaufXCJr6QawJyw7tuRysRsrE8w2p/4gGaxKIt/hX3qz/IbD1A==}
+
+  clax@0.0.6:
+    resolution: {integrity: sha512-onky/UiODwsd312qsgWt9MTGCWWpVpzIy1LU+yolQWzjw1kIeVya2aHdV0rICgd+jB3WNHinP3/YAK7qJSKwZQ==}
 
   client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
@@ -3694,6 +3700,8 @@ snapshots:
   class-variance-authority@0.7.0:
     dependencies:
       clsx: 2.0.0
+
+  clax@0.0.6: {}
 
   client-only@0.0.1: {}
 

@@ -110,11 +110,11 @@ export default function CreateAttributeForm() {
     const val = valueForm.getValues("attribute_value").toString().trim();
 
     const v = val.toString();
-    // setValues([...values, v]);
+    setValues([...values, v]);
     // values.push(v);
-    setValues((state) => {
-      state.push(v);
-    });
+    // setValues((state) => {
+    //   state.push(v);
+    // });
     console.log(values);
     valueForm.reset();
   };

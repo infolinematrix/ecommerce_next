@@ -47,18 +47,19 @@ import {
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  attributeCreateSchema,
-  attributeValueCreateSchema,
+  AttributeCreateSchema,
+  AttributeValueCreateSchema,
 } from "../types/attribute_types";
 import { attributeInputTypes } from "@/lib/constants";
 import api from "@/lib/apiClient";
 import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
 
 export default function CreateAttributeForm() {
   const [showValue, setshowValue] = useState(false);
 
-  const form = useForm<z.infer<typeof attributeCreateSchema>>({
-    resolver: zodResolver(attributeCreateSchema),
+  const form = useForm<z.infer<typeof AttributeCreateSchema>>({
+    resolver: zodResolver(AttributeCreateSchema),
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
@@ -69,8 +70,8 @@ export default function CreateAttributeForm() {
     },
   });
 
-  const valueForm = useForm<z.infer<typeof attributeValueCreateSchema>>({
-    resolver: zodResolver(attributeValueCreateSchema),
+  const valueForm = useForm<z.infer<typeof AttributeValueCreateSchema>>({
+    resolver: zodResolver(AttributeValueCreateSchema),
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
@@ -79,27 +80,34 @@ export default function CreateAttributeForm() {
     },
   });
 
-  async function onSubmit(formData: z.infer<typeof attributeCreateSchema>) {
+  async function onSubmit(formData: z.infer<typeof AttributeCreateSchema>) {
     //-parse zod schema
-    const monkeyParse = attributeCreateSchema.safeParse(formData);
+    const monkeyParse = AttributeCreateSchema.safeParse(formData);
     //--validate zod schema
     if (!monkeyParse.success) {
-      console.log("----VALIDATION ERROR");
+      alert("----VALIDATION ERROR");
       return;
     }
 
-    const data = monkeyParse.data;
+    const formdata = monkeyParse.data;
+    const data = {
+      attribute: formdata,
+      attribute_values: values,
+    };
+    // console.log(data);
 
-    // const response = await api.post(`/admin/attributes/create/api`, data, {
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded",
-    //   },
-    // });
+    const response = await api.post(`/admin/attributes/create/api`, data, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
 
-    console.log(data);
+    // console.log("===========", response.data.insertedId);
   }
 
   const showValueInput = (ev: string) => {
+    setValues([]);
+
     ["TEXTBOX", "TEXTAREA"].includes(ev)
       ? setshowValue(false)
       : setshowValue(true);
@@ -110,15 +118,19 @@ export default function CreateAttributeForm() {
   const addValue = () => {
     const val = valueForm.getValues("attribute_value").toString().trim();
 
-    // const v = val.toString();
-    // values.push(val);
-    setValues([...values, val]);
-    // values.push(v);
-    // setValues((state) => {
-    //   state.push(v);
-    // });
-    console.log(values);
-    valueForm.reset();
+    if (!values.includes(val) && val != "") {
+      setValues([...values, val]);
+      valueForm.reset();
+    } else {
+      alert("Invalid..");
+    }
+  };
+
+  const deleteValue = (index: number) => {
+    const action = confirm("Are you sure");
+    if (action) {
+      setValues([...values.slice(0, index), ...values.slice(index + 1)]);
+    }
   };
 
   return (
@@ -231,62 +243,13 @@ export default function CreateAttributeForm() {
             <Button type="submit">Create</Button>
           </div>
         </form>
-
-        {/* <div className="mt-8">
-          <Card className="p-4">
-            <form>
-              <div className="flex flex-row gap-4 justify-normal">
-                <div className="1w-full">
-                  <FormItem>
-                    <Input name="value"></Input>
-                  </FormItem>
-                </div>
-                <div className="w-fit">
-                  <Button>Add</Button>
-                </div>
-              </div>
-            </form>
-          </Card>
-        </div> */}
-
-        {/* <div className="pt-4">
-            <div className="h-70  rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">Invoice</TableHead>
-
-                    <TableHead className="text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {dummyList.map(() => {
-                    return (
-                      <>
-                        <TableRow>
-                          <TableCell>adasd</TableCell>
-                          <TableCell className="text-right">
-                            <Button asChild variant={"secondary"}>
-                              <Link href="#">
-                                <HomeIcon></HomeIcon>
-                              </Link>
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      </>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          </div> */}
       </Form>
 
       <div className="mt-8">
         {showValue == true ? (
-          <Form {...valueForm}>
-            <form noValidate>
-              <div className="flex flex-row gap-4 justify-normal">
+          <>
+            <Form {...valueForm}>
+              <div className="flex flex-row gap-4 justify-end">
                 <div className="w-[300px]">
                   <FormField
                     control={valueForm.control}
@@ -308,8 +271,9 @@ export default function CreateAttributeForm() {
                   </Button>
                 </div>
               </div>
-            </form>
-          </Form>
+            </Form>
+            <Separator className="my-4" />
+          </>
         ) : (
           <></>
         )}
@@ -317,21 +281,16 @@ export default function CreateAttributeForm() {
         {values.length > 0 ? (
           <>
             <Table>
-              {/* <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Child</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="w-[100px]">Parent</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader> */}
               <TableBody>
                 {values.map((value: string, index: number) => (
                   <TableRow key={index}>
                     <TableCell>{value}</TableCell>
                     <TableCell className="text-right">
-                      <Button asChild variant={"secondary"} className="">
+                      <Button
+                        asChild
+                        variant={"secondary"}
+                        onClick={(ev) => deleteValue(index)}
+                      >
                         <HomeIcon></HomeIcon>
                       </Button>
                     </TableCell>

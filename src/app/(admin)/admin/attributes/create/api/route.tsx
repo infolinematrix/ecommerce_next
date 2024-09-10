@@ -1,21 +1,35 @@
-import { createAttribute } from "@/lib/actions/attributes";
+import {
+  createAttribute,
+  createAttributeReturnId,
+  createValue,
+} from "@/lib/actions/attributes";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
 
-    const data = {
-      name: formData.get("name")?.toString().trim(),
-      identifier: formData.get("identifier")?.toString().trim(),
-      input_type: formData.get("input_type")?.toString().trim(),
-      custom_name: formData.get("custom_name")?.toString().trim(),
+    const attribute_data = {
+      name: formData.get("attribute[name]")?.toString().trim(),
+      identifier: formData.get("attribute[identifier]")?.toString().trim(),
+      input_type: formData.get("attribute[input_type]")?.toString().trim(),
+      custom_name: formData.get("attribute[custom_name]")?.toString().trim(),
     };
-    console.log(data);
 
-    const res = await createAttribute(data);
+    const insertedId = await createAttributeReturnId(attribute_data);
+    const values = formData.getAll("attribute_values[]");
+    values.map(async (item) => {
+      const data = {
+        attribute_id: insertedId,
+        attribute_value: item,
+      };
 
-    return NextResponse.json(res);
+      await createValue(data);
+    });
+
+    console.log("---------------------", values);
+
+    return NextResponse.json({});
   } catch (error) {
     console.log("API Error: ", error);
     return false;

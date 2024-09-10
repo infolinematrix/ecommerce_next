@@ -19,14 +19,19 @@ import {
 } from "@/components/ui/table";
 import { get_parents } from "@/lib/actions/category";
 import { HomeIcon } from "@radix-ui/react-icons";
-import { getAttributes } from "@/lib/actions/attributes";
-import DataTable from "./components/data_table";
+import { getAttributes, deleteAttributeById } from "@/lib/actions/attributes";
 import { AttributeType } from "@/db/schema/attributes";
+import { DeleteAttributeButton } from "./components/delete_button";
 
 // interface Props {
 //   param: string;
 //   searchParams: { [key: string]: string | string[] | undefined };
 // }
+
+// const deleteAttr = async () => {
+//   "use server";
+//   console.log("====================");
+// };
 
 export default async function AttributePage() {
   const data = await getAttributes();
@@ -99,7 +104,23 @@ const TableData = ({ data }: any) => {
                   : attribute.custom_name}
               </TableCell>
               <TableCell className="text-right">
-                <Button asChild variant={"secondary"} className="">
+                {/* <Button
+                  asChild
+                  variant={"secondary"}
+                  className=""
+                  type="submit"
+                  onClick={(ev) => {
+                    console.log("-------------");
+                  }}
+                >
+                  <HomeIcon color="primary"></HomeIcon>
+                </Button> */}
+                <DeleteAttributeButton id={attribute.id} />
+                {/* <Button variant={"ghost"}>
+                    <HomeIcon></HomeIcon>
+                  </Button> */}
+
+                {/* <Button asChild variant={"secondary"} className="">
                   <Link
                     href={{
                       pathname: "/admin/attribute/update",
@@ -108,7 +129,7 @@ const TableData = ({ data }: any) => {
                   >
                     <HomeIcon></HomeIcon>
                   </Link>
-                </Button>
+                </Button> */}
               </TableCell>
             </TableRow>
           ))}

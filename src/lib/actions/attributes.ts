@@ -1,5 +1,7 @@
+"use server";
+
 import { db } from "@/db";
-import { attributes } from "@/db/schema/attributes";
+import { attribute_values, attributes } from "@/db/schema/attributes";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -22,6 +24,8 @@ export const getAttributeById = async (id: string) => {
       .select()
       .from(attributes)
       .where(eq(attributes.id, id));
+    // const data2 = db.query.attributes
+
     return data;
   } catch (error) {
     console.log("Action Error", error);
@@ -39,6 +43,7 @@ export const updateAttributeById = async (id: string, data: any) => {
 export const deleteAttributeById = async (id: string) => {
   try {
     await db.delete(attributes).where(eq(attributes.id, id));
+    revalidatePath("getAttributes");
   } catch (error) {
     console.log("Action Error", error);
     return null;
@@ -62,8 +67,9 @@ export const getValues = async () => {
     return null;
   }
 };
-export const createValue = async () => {
+export const createValue = async (data: any) => {
   try {
+    await db.insert(attribute_values).values(data);
   } catch (error) {
     console.log("Action Error", error);
     return null;
@@ -74,5 +80,19 @@ export const deleteValue = async (id: string) => {
   } catch (error) {
     console.log("Action Error", error);
     return null;
+  }
+};
+
+export const createAttributeReturnId = async (data: any) => {
+  try {
+    const id = await db
+      .insert(attributes)
+      .values(data)
+      .returning({ insertedId: attributes.id });
+
+    return id[0].insertedId;
+  } catch (error) {
+    console.log("Action Error", error);
+    return false;
   }
 };

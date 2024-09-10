@@ -1,12 +1,12 @@
 import type { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
-  name: "Meta's Threads",
+  name: "Next Commerce",
   description:
-    "Thread app created with Nextjs, TailwindCSS, TypeScript, Shadcn-UI, NextAuth, Drizzle ORM and NeonDB.",
-  url: "https://thr.rohi.dev",
+    "Next Commerce created with Nextjs, TailwindCSS, TypeScript, Shadcn-UI, NextAuth, Drizzle ORM and NeonDB.",
+  url: "#",
   links: {
-    twitter: "https://twitter.com/gneiru",
-    github: "https://github.com/gneiru",
+    twitter: "#",
+    github: "#",
   },
 };

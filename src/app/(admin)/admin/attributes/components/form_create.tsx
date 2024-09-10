@@ -105,14 +105,14 @@ export default function CreateAttributeForm() {
       : setshowValue(true);
   };
 
-  const [values, setValues] = useState(string[]);
+  const [values, setValues] = useState<string[]>([]);
 
   const addValue = () => {
     const val = valueForm.getValues("attribute_value").toString().trim();
 
     // const v = val.toString();
-    values.push(val);
-    // setValues([...values, v]);
+    // values.push(val);
+    setValues([...values, val]);
     // values.push(v);
     // setValues((state) => {
     //   state.push(v);

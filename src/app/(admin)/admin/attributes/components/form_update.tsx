@@ -148,7 +148,7 @@ export function FormUpdate({ data }: any) {
             >
               Reset
             </Button>
-            <Button type="submit">Create</Button>
+            <Button type="submit">Update</Button>
           </div>
         </form>
       </Form>

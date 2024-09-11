@@ -33,11 +33,6 @@ export default async function UpdatePage({ searchParams }: Props) {
                     </PageHeaderDescription>
                   </>
                 </PageHeader>
-                <>
-                  {/* <Link href={"/admin/attributes/create"}>
-                    <Button variant={"secondary"}>Create new </Button>
-                  </Link> */}
-                </>
               </div>
               <div className="pt-4">
                 <AttributeForm data={attrInfo} />

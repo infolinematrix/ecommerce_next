@@ -20,14 +20,6 @@ export const getAttributes = async () => {
 
 export const getAttributeById = async (id: string) => {
   try {
-    // const data = await db
-    //   .select()
-    //   .from(attributes)
-    //   .where(eq(attributes.id, id));
-    // const data2 = db.query.attributes
-
-    // return data[0];
-
     const data = db.query.attributes.findFirst({
       // with:
       where: eq(attributes.id, id),

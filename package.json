@@ -13,7 +13,7 @@
     "db:migrate": "drizzle-kit migrate  --config src/db/config.ts",
     "db:push": "drizzle-kit push --config src/db/config.ts",
     "db:introspect": "drizzle-kit introspect --config src/db/config.ts",
-    "db:studio": "drizzle-kit studio --config src/db/config.ts",
+    "db:studio": "drizzle-kit studio --host localhost --port 3001 --verbose --config src/db/config.ts",
     "fmt": "pnpm biome format ./src --write && pnpm biome check ./src --apply-unsafe"
   },
   "dependencies": {

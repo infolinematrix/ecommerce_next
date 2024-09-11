@@ -1,7 +1,11 @@
 "use server";
 
 import { db } from "@/db";
-import { attribute_values, attributes } from "@/db/schema/attributes";
+import {
+  attribute_values,
+  attributes,
+  AttributeType,
+} from "@/db/schema/attributes";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -20,10 +24,13 @@ export const getAttributes = async () => {
 
 export const getAttributeById = async (id: string) => {
   try {
-    const data = db.query.attributes.findFirst({
-      // with:
+    const data = await db.query.attributes.findFirst({
+      with: {
+        attribute_values: true,
+      },
       where: eq(attributes.id, id),
     });
+
     return data;
   } catch (error) {
     console.log("Action Error", error);

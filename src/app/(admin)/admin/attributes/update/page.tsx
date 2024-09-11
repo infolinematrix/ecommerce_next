@@ -35,9 +35,10 @@ export default async function UpdatePage({ searchParams }: Props) {
                 </PageHeader>
               </div>
               <div className="pt-4">
-                <AttributeForm data={attrInfo} />
-
-                {/* <AttributeValueList data={attrInfo} /> */}
+                <FormUpdate
+                  attribute={attrInfo}
+                  attribute_values={attrInfo.attribute_values}
+                />
               </div>
             </ScrollArea>
           </div>
@@ -53,11 +54,7 @@ export const AttributeForm = ({ data }: any) => {
   const attribute: AttributeType = data;
   console.log("-----------------", attribute!);
   if (!attribute) return <></>;
-  return (
-    <>
-      <FormUpdate data={attribute} />
-    </>
-  );
+  return <>{/* <FormUpdate data={attribute} /> */}</>;
 };
 
 export const AttributeValueList = ({ data }: any) => {

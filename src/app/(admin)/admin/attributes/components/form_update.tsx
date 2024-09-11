@@ -23,21 +23,36 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { AttributeType, AttributeValueType } from "@/db/schema/attributes";
+import { Table } from "@/components/ui/table";
+import { ValuesDataTable } from "./values_data_table";
+import { useEffect, useState } from "react";
+import { and } from "drizzle-orm";
 
-export function FormUpdate({ data }: any) {
+interface Props {
+  attribute: AttributeType;
+  attribute_values: AttributeValueType[];
+}
+
+export function FormUpdate({ attribute, attribute_values }: Props) {
   const form = useForm<z.infer<typeof AttributeCreateSchema>>({
     resolver: zodResolver(AttributeCreateSchema),
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
-      name: data.name || "",
-      identifier: data.identifier || "",
-      custom_name: data.custom_name || "",
-      input_type: data.input_type || "TEXTBOX",
+      name: attribute.name || "",
+      identifier: attribute.identifier || "",
+      custom_name: attribute.custom_name || "",
+      input_type: attribute.input_type || "TEXTBOX",
     },
   });
 
-  const onSubmit = async () => {};
+  const [values, setValues] =
+    useState<Array<AttributeValueType>>(attribute_values);
+
+  const onSubmit = async () => {
+    console.log(values);
+  };
 
   return (
     <div>
@@ -152,6 +167,13 @@ export function FormUpdate({ data }: any) {
           </div>
         </form>
       </Form>
+
+      <div className="flex-1 mt-8">
+        <div className="flex justify-end">values</div>
+        <div>
+          <ValuesDataTable values={values} />
+        </div>
+      </div>
     </div>
   );
 }

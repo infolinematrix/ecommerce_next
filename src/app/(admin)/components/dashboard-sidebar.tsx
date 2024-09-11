@@ -80,9 +80,7 @@ export function DashboardSidebar({
           {siteConfig.name}
         </Link>
       </div>
-      {/* <div className="flex flex-col gap-2.5 px-4 pt-2 lg:px-6 lg:pt-4">
-        {children}
-      </div> */}
+
       <ScrollArea className="h-[calc(100vh-8rem)] px-3 py-2.5 lg:px-5 border-r border-border/60 ">
         <SidebarNav items={sidebarNav} className="p-1 pt-1" />
       </ScrollArea>

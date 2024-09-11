@@ -8,10 +8,10 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function Providers({ children }: Props) {
-  const [data, setData] = useState("Admin Root Provider");
+export default function AdminProviders({ children }: Props) {
+  const [data, setData] = useState("Started ... Admin Root Provider");
 
-  console.log("Provider service started.....", data);
+  console.log(data);
 
   return <>{children}</>;
 }

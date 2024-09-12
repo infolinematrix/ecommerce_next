@@ -44,6 +44,12 @@ export function DashboardSidebar({
       active: segments.includes("attributes"),
     },
     {
+      title: "Types",
+      href: `/admin/types`,
+      icon: "product",
+      active: segments.includes("types"),
+    },
+    {
       title: "Products",
       href: `#`,
       icon: "product",

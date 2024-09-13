@@ -42,7 +42,7 @@ export default async function UpdatePage({ searchParams }: Props) {
               </div>
             </ScrollArea>
           </div>
-          <div className="flex w-1/3">Help</div>
+          <div className="flex w-1/3 hidden:md">Help</div>
         </div>
       </Shell>
     );

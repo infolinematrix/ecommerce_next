@@ -87,9 +87,9 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
       attribute_values: values,
     };
 
-    console.log("--------------", data);
+    // console.log("--------------", data);
 
-    const response = await api.post(`/admin/attributes/update/api`, data, {
+    const response = await api.put(`/admin/attributes/update/api`, data, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -237,7 +237,6 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
                                   <TableCell>{item.attribute_value}</TableCell>
                                   <TableCell className="text-right">
                                     <Button
-                                      asChild
                                       variant={"outline"}
                                       size={"sm"}
                                       onClick={() => deleteValue(index)}

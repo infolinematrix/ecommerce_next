@@ -1,8 +1,15 @@
-import { NextResponse } from "next/server";
+import {
+  createValue,
+  deleteValesByAttributeId,
+  updateAttributeById,
+} from "@/lib/actions/attributes";
+import { revalidatePath } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
   try {
     const formData = await request.formData();
+
     const attribute_data = {
       name: formData.get("attribute[name]")?.toString().trim(),
       identifier: formData.get("attribute[identifier]")?.toString().trim(),
@@ -10,19 +17,27 @@ export async function PUT(request: Request) {
       custom_name: formData.get("attribute[custom_name]")?.toString().trim(),
     };
 
-    const values = formData.getAll("attribute_values[]");
-    // values.map(async (item) => {
-    //   const data = {
-    //     attribute_id: insertedId,
-    //     attribute_value: item,
-    //   };
+    //--save attribute
+    const id = formData.get("id")?.toString().trim();
+    await updateAttributeById(id!, attribute_data);
 
-    //   await createValue(data);
-    // });
+    // //--save values
 
-    console.log("---------------------", formData);
-    return NextResponse.json({});
+    if (["TEXTBOX", "TEXTAREA"].includes(attribute_data.input_type!)) {
+      await deleteValesByAttributeId(id!);
+    } else {
+      const values = formData.getAll("attribute_values[]");
+      // console.log("=============", values);
+
+      await deleteValesByAttributeId(id!);
+      values.map(async (i: any, ix: number) => {
+        await createValue(id!, i);
+      });
+    }
+
+    return NextResponse.json(request.body);
   } catch (error) {
     console.log("ROUTE ERROR: ", error);
+    return NextResponse.json({ error });
   }
 }

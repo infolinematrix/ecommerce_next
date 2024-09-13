@@ -56,7 +56,7 @@ export default function CreateForm(props: { parentId: string | undefined }) {
 
     const data = monkeyParse.data;
 
-    console.log(data);
+    // console.log(data);
 
     const response = await api.post(`/admin/categories/create/api`, data, {
       headers: {

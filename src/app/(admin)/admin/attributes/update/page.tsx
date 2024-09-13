@@ -10,6 +10,7 @@ import { AttributeType } from "@/db/schema/attributes";
 import { getAttributeById } from "@/lib/actions/attributes";
 import Link from "next/link";
 import { FormUpdate } from "../components/form_update";
+import { any, string } from "zod";
 
 interface Props {
   searchParams: { id: string | undefined };
@@ -17,6 +18,12 @@ interface Props {
 
 export default async function UpdatePage({ searchParams }: Props) {
   const attrInfo = await getAttributeById(searchParams.id || "");
+
+  const values: string[] = [];
+
+  attrInfo?.attribute_values.map((v: any) => {
+    values.push(v.attribute_value.toString());
+  });
 
   if (attrInfo) {
     return (
@@ -35,10 +42,7 @@ export default async function UpdatePage({ searchParams }: Props) {
                 </PageHeader>
               </div>
               <div className="pt-4">
-                <FormUpdate
-                  attribute={attrInfo}
-                  attribute_values={attrInfo.attribute_values}
-                />
+                <FormUpdate attribute={attrInfo} attribute_values={values} />
               </div>
             </ScrollArea>
           </div>

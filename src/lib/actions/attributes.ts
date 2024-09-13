@@ -6,8 +6,9 @@ import {
   attributes,
   AttributeType,
 } from "@/db/schema/attributes";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { exit } from "process";
 
 export const getAttributes = async () => {
   try {
@@ -15,6 +16,7 @@ export const getAttributes = async () => {
       .select()
       .from(attributes)
       .where(eq(attributes.status, 51));
+
     return data;
   } catch (error) {
     console.log("Action Error", error);
@@ -40,9 +42,11 @@ export const getAttributeById = async (id: string) => {
 export const updateAttributeById = async (id: string, data: any) => {
   try {
     await db.update(attributes).set(data).where(eq(attributes.id, id));
+
+    // revalidatePath("/admin/attributes");
+    // revalidatePath("/admin/attributes", "layout");
   } catch (error) {
     console.log("Action Error", error);
-    return null;
   }
 };
 export const deleteAttributeById = async (id: string) => {
@@ -72,9 +76,27 @@ export const getValues = async () => {
     return null;
   }
 };
-export const createValue = async (data: any) => {
+
+export const deleteValesByAttributeId = async (id: string) => {
+  await db
+    .delete(attribute_values)
+    .where(eq(attribute_values.attribute_id, id));
+};
+
+export const createValue = async (attribute_id: string, value: any) => {
   try {
-    await db.insert(attribute_values).values(data);
+    const exist = await db.query.attribute_values.findFirst({
+      where: and(
+        eq(attribute_values.attribute_id, attribute_id),
+        eq(attribute_values.attribute_value, value)
+      ),
+    });
+
+    // console.log(value, "======Exist==================", value);
+    await db.insert(attribute_values).values({
+      attribute_id: attribute_id,
+      attribute_value: value,
+    });
   } catch (error) {
     console.log("Action Error", error);
     return null;

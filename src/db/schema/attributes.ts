@@ -11,7 +11,6 @@ import {
 } from "drizzle-orm/pg-core";
 import { lifecycleDates } from "../utils";
 import { relations } from "drizzle-orm/relations";
-import { schema } from "../schema";
 
 export const inputEnum = pgEnum("attribute_type", [
   "TEXTBOX",

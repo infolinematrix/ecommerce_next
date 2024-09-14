@@ -44,6 +44,10 @@ interface Props {
 }
 
 export function FormUpdate({ attribute, attribute_values }: Props) {
+  const [showValue, setshowValue] = useState(false);
+  const [values, setValues] = useState(attribute_values);
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof AttributeUpdateSchema>>({
     resolver: zodResolver(AttributeUpdateSchema),
     mode: "onChange",
@@ -56,9 +60,6 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
     },
   });
 
-  const [showValue, setshowValue] = useState(false);
-  const [values, setValues] = useState(attribute_values);
-
   const showValueInput = (ev: string) => {
     ["TEXTBOX", "TEXTAREA"].includes(ev)
       ? setshowValue(false)
@@ -68,7 +69,6 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
   const deleteValue = (index: number) => {
     const action = confirm("Are you sure");
     if (action) {
-      // console.log(values);
       setValues([...values.slice(0, index), ...values.slice(index + 1)]);
     }
   };
@@ -83,7 +83,6 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
     }
   };
 
-  const router = useRouter();
   const onSubmit = async (formData: z.infer<typeof AttributeUpdateSchema>) => {
     //-parse zod schema
     const monkeyParse = AttributeUpdateSchema.safeParse(formData);

@@ -8,8 +8,12 @@ import {
   PageHeaderHeading,
 } from "@/app/(admin)/components/page-header";
 import { Shell } from "@/app/(admin)/components/shell";
+import CreateForm from "../components/create_form";
+import { getAttributes } from "@/lib/actions/attributes";
 
-export default function TypeCreatePage() {
+export default async function TypeCreatePage() {
+  const attributes = await getAttributes();
+
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">
@@ -24,17 +28,15 @@ export default function TypeCreatePage() {
                   </PageHeaderDescription>
                 </>
               </PageHeader>
-              <>
-                {/* <Link href={"/admin/attributes/create"}>
-                  <Button variant={"secondary"}>Create new </Button>
-                </Link> */}
-              </>
+              <></>
             </div>
 
-            <div className="pt-4">{/* <TableData data={data} /> */}</div>
+            <div className="pt-4">
+              <CreateForm data={attributes} />
+            </div>
           </ScrollArea>
         </div>
-        <div className="flex w-1/3">sad</div>
+        <div className="flex w-1/3">Help</div>
       </div>
     </Shell>
   );

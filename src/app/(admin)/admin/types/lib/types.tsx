@@ -7,6 +7,7 @@ export const TypesSchema = z.object({
 
 export const TypePropertiesSchema = z.object({
   attribute_id: z.string().min(1).max(36),
+  attribute_name: z.string().optional(),
   filterable: z.boolean(),
   price_varient: z.boolean(),
   required: z.boolean(),

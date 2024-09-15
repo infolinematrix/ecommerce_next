@@ -42,7 +42,7 @@ export default async function UpdatePage({ searchParams }: Props) {
                 </PageHeader>
               </div>
               <div className="pt-4">
-                <FormUpdate attribute={attrInfo} attribute_values={values} />
+                {/* <FormUpdate attribute={attrInfo} attribute_values={values} /> */}
               </div>
             </ScrollArea>
           </div>

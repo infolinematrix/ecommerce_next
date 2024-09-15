@@ -10,9 +10,12 @@ import {
 import { Shell } from "@/app/(admin)/components/shell";
 import CreateForm from "../components/create_form";
 import { getAttributes } from "@/lib/actions/attributes";
+import StoreProvider from "../lib/store";
 
 export default async function TypeCreatePage() {
   const attributes = await getAttributes();
+
+  console.log(attributes?.length);
 
   return (
     <Shell variant="sidebar" className="overflow-hidden">
@@ -31,19 +34,13 @@ export default async function TypeCreatePage() {
               <></>
             </div>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
             <div className="pt-4">Form Start</div>
-=======
+
             <div className="pt-4">
-              <CreateForm data={attributes} />
+              <StoreProvider data={attributes}>
+                <CreateForm />
+              </StoreProvider>
             </div>
->>>>>>> 232af569e7aea1bc7406e3aca68ed8876f41e868
-=======
-            <div className="pt-4">
-              <CreateForm data={attributes} />
-            </div>
->>>>>>> 232af569e7aea1bc7406e3aca68ed8876f41e868
           </ScrollArea>
         </div>
         <div className="flex w-1/3">Help</div>

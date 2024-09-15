@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { TypePropertiesSchema, TypesSchema } from "../lib/types";
+import { TypesSchema } from "../lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -13,21 +13,15 @@ import {
 } from "@/components/ui/form";
 import { slugify } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { attributeInputTypes } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { AddAttribute } from "./add_attributes";
-import { AttributeType } from "@/db/schema/attributes";
+import StoreProvider, { useTypes } from "../lib/store";
+import { date } from "drizzle-orm/mysql-core";
+import { useStore } from "zustand";
 
-export default function CreateForm({ data }: any) {
+export default function CreateForm() {
+  const store: any = useTypes();
+
   const typeForm = useForm<z.infer<typeof TypesSchema>>({
     resolver: zodResolver(TypesSchema),
     mode: "onChange",
@@ -43,7 +37,7 @@ export default function CreateForm({ data }: any) {
   };
 
   return (
-    <div>
+    <>
       <Form {...typeForm}>
         <form noValidate onSubmit={typeForm.handleSubmit(onTypeSubmit)}>
           <div className="flex flex-row gap-4 justify-between">
@@ -220,11 +214,11 @@ export default function CreateForm({ data }: any) {
         </form>
       </Form> */}
 
-      <AddAttribute data={data}></AddAttribute>
+      <AddAttribute></AddAttribute>
 
       <div className="mt-10">
         <Button>Save Type</Button>
       </div>
-    </div>
+    </>
   );
 }

@@ -11,19 +11,14 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 import {
   AttributeCreateSchema,
   AttributeUpdateSchema,
   AttributeValueUpdateSchema,
 } from "../types/attribute_types";
-=======
 
->>>>>>> 232af569e7aea1bc7406e3aca68ed8876f41e868
-=======
 
->>>>>>> 232af569e7aea1bc7406e3aca68ed8876f41e868
 import { slugify } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -69,10 +64,10 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
       identifier: attribute.identifier,
       custom_name: attribute.custom_name ?? attribute.name,
       input_type: attribute.input_type,
-<<<<<<< HEAD
+
     },
   });
-<<<<<<< HEAD
+
   const valueForm = useForm<z.infer<typeof AttributeValueUpdateSchema>>({
     resolver: zodResolver(AttributeValueUpdateSchema),
     mode: "onChange",
@@ -96,12 +91,9 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
     });
   }, []);
   console.log(values, "============");
-=======
->>>>>>> 232af569e7aea1bc7406e3aca68ed8876f41e868
-=======
-    },
+
   });
->>>>>>> 232af569e7aea1bc7406e3aca68ed8876f41e868
+
 
   const showValueInput = (ev: string) => {
     ["TEXTBOX", "TEXTAREA"].includes(ev)
@@ -127,17 +119,13 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
   };
 
   const onSubmit = async (formData: z.infer<typeof AttributeUpdateSchema>) => {
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     console.log(form.getValues("input_type"));
 
     !["TEXTBOX", "TEXTAREA"].includes(form.getValues("input_type")) &&
       setValues([]);
 
-=======
->>>>>>> 232af569e7aea1bc7406e3aca68ed8876f41e868
-=======
->>>>>>> 232af569e7aea1bc7406e3aca68ed8876f41e868
+
     //-parse zod schema
     const monkeyParse = AttributeUpdateSchema.safeParse(formData);
     //--validate zod schema
@@ -157,9 +145,7 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
     };
     console.log("--------------", finalData);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    console.log("--------------", data);
+   
 
     // const response = await api.put(`/admin/attributes/update/api`, data, {
     //   headers: {
@@ -221,8 +207,6 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
 
   return (
     <div>
-<<<<<<< HEAD
-<<<<<<< HEAD
       <AttributeContext.Provider value={{ attribute, attribute_values }}>
         <>
           <Form {...form}>

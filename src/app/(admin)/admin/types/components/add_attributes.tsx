@@ -34,14 +34,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { dummyList } from "@/lib/utils";
 import { z } from "zod";
+import { useTypes } from "../lib/store";
 
-export const AddAttribute = ({ data }: any) => {
+export const AddAttribute = () => {
+  const store: any = useTypes();
+
   const typePropertiesform = useForm<z.infer<typeof TypePropertiesSchema>>({
     resolver: zodResolver(TypePropertiesSchema),
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
       attribute_id: "",
+      attribute_name: "",
+      filterable: false,
+      price_varient: false,
+      required: false,
     },
   });
   const onTypePropertiesSubmit = async (
@@ -57,6 +64,25 @@ export const AddAttribute = ({ data }: any) => {
 
     const formdata = monkeyParse.data;
     console.log("Added..............", formdata);
+
+    // store.type_attributes.push(formdata);
+    // store.type_attributes.pushIfNotExist(formdata, function (e: any) {
+    //   return e.attribute_id === formdata.attribute_id;
+    // });
+    if (
+      !store.type_attributes.find(
+        (o: any) => o.attribute_id === formdata.attribute_id
+      )
+    ) {
+      store.type_attributes.push(formdata);
+    }
+
+    typePropertiesform.reset();
+  };
+
+  const attribute_delete = (idx: number) => {
+    const action = alert("Are you sure?");
+    store.attribute_remove(idx);
   };
 
   return (
@@ -85,9 +111,9 @@ export const AddAttribute = ({ data }: any) => {
                           <SelectValue placeholder="Select input" />
                         </SelectTrigger>
                         <SelectContent>
-                          {attributeInputTypes.map((item) => (
-                            <SelectItem key={item.value} value={item.value}>
-                              {item.label}
+                          {store.attributes.map((item: any) => (
+                            <SelectItem key={item.id} value={item.id}>
+                              {item.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -217,19 +243,25 @@ export const AddAttribute = ({ data }: any) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {dummyList.map((i) => (
-              <TableRow key={i}>
-                <TableCell className="font-medium">{"safddsf"}</TableCell>
-                <TableCell>{"safddsf"}</TableCell>
-                <TableCell>{"safddsf"}</TableCell>
-                <TableCell>{"safddsf"}</TableCell>
-                <TableCell className="text-right">
-                  <Button variant={"secondary"}>
-                    <CrossCircledIcon></CrossCircledIcon>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {store.type_attributes &&
+              store.type_attributes.map((item: any, index: number) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">
+                    {item.attribute_id}
+                  </TableCell>
+                  <TableCell>{item.filterable ? "Yes" : "No"}</TableCell>
+                  <TableCell>{item.price_varient ? "Yes" : "No"}</TableCell>
+                  <TableCell>{item.required ? "Yes" : "No"}</TableCell>
+                  <TableCell className="text-right">
+                    <Button
+                      variant={"secondary"}
+                      onClick={(ev) => attribute_delete(index)}
+                    >
+                      <CrossCircledIcon></CrossCircledIcon>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>

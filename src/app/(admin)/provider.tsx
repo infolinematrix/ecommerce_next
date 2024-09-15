@@ -11,7 +11,5 @@ interface Props {
 export default function AdminProviders({ children }: Props) {
   const [data, setData] = useState("Started ... Admin Root Provider");
 
-  // console.log(data);
-
   return <>{children}</>;
 }

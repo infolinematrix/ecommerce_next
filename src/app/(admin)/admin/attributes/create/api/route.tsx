@@ -1,8 +1,11 @@
+import { db } from "@/db";
+import { attribute_values } from "@/db/schema/attributes";
 import {
   createAttribute,
   createAttributeReturnId,
   createValue,
 } from "@/lib/actions/attributes";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -18,16 +21,22 @@ export async function POST(request: Request) {
 
     const insertedId = await createAttributeReturnId(attribute_data);
     const values = formData.getAll("attribute_values[]");
-    values.map(async (item) => {
-      const data = {
-        attribute_id: insertedId,
-        attribute_value: item,
-      };
 
-      await createValue(data);
-    });
+    if (insertedId != false) {
+      values.map(async (item) => {
+        await createValue(insertedId, item);
+      });
+    }
 
-    console.log("---------------------", values);
+    // const e = await db.query.attribute_values.findFirst({
+
+    //   where: eq(
+    //     attribute_values.attribute_id,
+    //     "b9615ac4-676d-46c4-930f-0a70b7ba0f12"
+    //   ),
+    // });
+
+    // console.log("---------------------", e?.attribute_id);
 
     return NextResponse.json({});
   } catch (error) {

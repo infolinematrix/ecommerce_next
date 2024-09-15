@@ -10,6 +10,7 @@ import {
 import { Shell } from "./components/shell";
 import { SidebarProvider } from "./components/sidebar-provider";
 import Loading from "./loading";
+import { NavigationEvents } from "@/components/navigation-events";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
@@ -40,10 +41,14 @@ export default function Template({ children }: { children: React.ReactNode }) {
             </DashboardSidebarSheet>
           </DashboardHeader>
           <main className="flex-1 overflow-hidden p-6">
-            <Suspense fallback={<Loading />}>{children}</Suspense>
+            <Suspense fallback={<Loading />}>
+              {children}
+              <NavigationEvents />
+            </Suspense>
           </main>
         </div>
       </div>
+      //{" "}
     </SidebarProvider>
   );
 }

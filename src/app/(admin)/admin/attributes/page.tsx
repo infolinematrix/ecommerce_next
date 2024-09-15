@@ -35,7 +35,7 @@ import { DeleteAttributeButton } from "./components/delete_button";
 
 export default async function AttributePage() {
   const data = await getAttributes();
-  data ?? console.log("NO DATA");
+  // data ?? console.log("NO DATA");
 
   return (
     <Shell variant="sidebar" className="overflow-hidden">
@@ -83,7 +83,7 @@ const TableData = ({ data }: any) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((attribute: AttributeType) => (
+          {data?.map((attribute: AttributeType) => (
             <TableRow key={attribute.id}>
               <TableCell className="font-medium">
                 <Link
@@ -109,12 +109,6 @@ const TableData = ({ data }: any) => {
             </TableRow>
           ))}
         </TableBody>
-        {/* <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter> */}
       </Table>
     </>
   );

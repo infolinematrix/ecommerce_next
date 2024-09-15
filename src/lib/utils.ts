@@ -100,6 +100,6 @@ export function isMacOs() {
   return window.navigator.userAgent.includes("Mac");
 }
 
-export const dummyList = Array.from({ length: 10 }).map(
+export const dummyList = Array.from({ length: 5 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
 );

@@ -54,9 +54,11 @@ import { attributeInputTypes } from "@/lib/constants";
 import api from "@/lib/apiClient";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
 
 export default function CreateAttributeForm() {
   const [showValue, setshowValue] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof AttributeCreateSchema>>({
     resolver: zodResolver(AttributeCreateSchema),
@@ -75,7 +77,6 @@ export default function CreateAttributeForm() {
     mode: "onChange",
     shouldUnregister: false,
     defaultValues: {
-      // attribute_id: "",
       attribute_value: "",
     },
   });
@@ -90,6 +91,7 @@ export default function CreateAttributeForm() {
     }
 
     const formdata = monkeyParse.data;
+
     const data = {
       attribute: formdata,
       attribute_values: values,
@@ -103,6 +105,8 @@ export default function CreateAttributeForm() {
     });
 
     // console.log("===========", response.data.insertedId);
+
+    router.back();
   }
 
   const showValueInput = (ev: string) => {

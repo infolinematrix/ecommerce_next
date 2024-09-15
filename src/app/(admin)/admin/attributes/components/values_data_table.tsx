@@ -19,7 +19,7 @@ export const ValuesDataTable = () => {
         ...useAttribute.attribute_values.slice(0, index),
         ...useAttribute.attribute_values.slice(index + 1),
       ];
-      console.log(useAttribute.attribute_values);
+      // console.log(useAttribute.attribute_values);
       // useAttribute.attreibute_values = tv;
     }
   };

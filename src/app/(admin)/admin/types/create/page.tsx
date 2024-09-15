@@ -32,7 +32,13 @@ export default async function TypeCreatePage() {
             </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             <div className="pt-4">Form Start</div>
+=======
+            <div className="pt-4">
+              <CreateForm data={attributes} />
+            </div>
+>>>>>>> 232af569e7aea1bc7406e3aca68ed8876f41e868
 =======
             <div className="pt-4">
               <CreateForm data={attributes} />

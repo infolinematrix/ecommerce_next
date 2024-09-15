@@ -31,7 +31,7 @@ export default function TypeCreatePage() {
               </>
             </div>
 
-            <div className="pt-4">{/* <TableData data={data} /> */}</div>
+            <div className="pt-4">Form Start</div>
           </ScrollArea>
         </div>
         <div className="flex w-1/3">sad</div>

@@ -14,6 +14,7 @@ import { z } from "zod";
 import {
   AttributeCreateSchema,
   AttributeUpdateSchema,
+  AttributeValueUpdateSchema,
 } from "../types/attribute_types";
 import { slugify } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -50,10 +51,29 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
       input_type: attribute.input_type || "TEXTBOX",
     },
   });
-
+  const valueForm = useForm<z.infer<typeof AttributeValueUpdateSchema>>({
+    resolver: zodResolver(AttributeValueUpdateSchema),
+    mode: "onChange",
+    shouldUnregister: false,
+    defaultValues: {
+      attribute_value: "",
+    },
+  });
   const [showValue, setshowValue] = useState(attribute_values.length > 0);
-  const [values, setValues] =
-    useState<Array<AttributeValueType>>(attribute_values);
+  // const [values, setValues] =
+  //   useState<Array<AttributeValueType>>(attribute_values);
+
+  const [values, setValues] = useState<Array<String>>([]);
+
+  useEffect(() => {
+    attribute_values.map((r) => {
+      // _setValues([..._values, r.attribute_value]);
+      // [...values, val]
+      addValue(r.attribute_value);
+      // console.log(r.attribute_value);
+    });
+  }, []);
+  console.log(values, "============");
 
   const showValueInput = (ev: string) => {
     ["TEXTBOX", "TEXTAREA"].includes(ev)
@@ -70,7 +90,9 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
   };
 
   const onSubmit = async (formData: z.infer<typeof AttributeUpdateSchema>) => {
-    ["TEXTBOX", "TEXTAREA"].includes(form.getValues("input_type")) &&
+    console.log(form.getValues("input_type"));
+
+    !["TEXTBOX", "TEXTAREA"].includes(form.getValues("input_type")) &&
       setValues([]);
 
     //-parse zod schema
@@ -89,11 +111,24 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
 
     console.log("--------------", data);
 
-    const response = await api.post(`/admin/attributes/update/api`, data, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
+    // const response = await api.put(`/admin/attributes/update/api`, data, {
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded",
+    //   },
+    // });
+  };
+
+  const addValue = (val: any) => {
+    // const val = valueForm.getValues("attribute_value").toString().trim();
+    // console.log(val);
+
+    if (!values.includes(val) && val != "") {
+      setValues([...values, val]);
+      valueForm.reset();
+      console.log("-----------------", values);
+    } else {
+      alert("Invalid..");
+    }
   };
 
   return (
@@ -223,32 +258,62 @@ export function FormUpdate({ attribute, attribute_values }: Props) {
 
           {showValue == true ? (
             <div className="flex-1 mt-8">
-              <div className="flex justify-end">values</div>
+              <div className="flex justify-end">
+                <Form {...valueForm}>
+                  <div className="flex flex-row gap-4 justify-end">
+                    <div className="w-[300px]">
+                      <FormField
+                        control={valueForm.control}
+                        name="attribute_value"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input placeholder="Enter value" {...field} />
+                            </FormControl>
+                            <FormDescription></FormDescription>
+                            {/* <FormMessage /> */}
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="w-fit">
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          return addValue(
+                            valueForm.getValues("attribute_value")
+                          );
+                        }}
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </div>
+                </Form>
+              </div>
               <div>
                 <>
                   {values.length > 0 ? (
                     <>
                       <Table>
                         <TableBody>
-                          {values.map(
-                            (item: AttributeValueType, index: number) => {
-                              return (
-                                <TableRow key={item.id}>
-                                  <TableCell>{item.attribute_value}</TableCell>
-                                  <TableCell className="text-right">
-                                    <Button
-                                      asChild
-                                      variant={"outline"}
-                                      size={"sm"}
-                                      onClick={() => deleteValue(index)}
-                                    >
-                                      <CrossCircledIcon></CrossCircledIcon>
-                                    </Button>
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            }
-                          )}
+                          {values.map((item: any, index: number) => {
+                            return (
+                              <TableRow key={index}>
+                                <TableCell>{item}</TableCell>
+                                <TableCell className="text-right">
+                                  <Button
+                                    asChild
+                                    variant={"outline"}
+                                    size={"sm"}
+                                    onClick={() => deleteValue(index)}
+                                  >
+                                    <CrossCircledIcon></CrossCircledIcon>
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
                         </TableBody>
                       </Table>
                     </>

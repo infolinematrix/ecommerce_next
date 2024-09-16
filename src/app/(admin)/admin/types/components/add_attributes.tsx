@@ -63,12 +63,15 @@ export const AddAttribute = () => {
     }
 
     const formdata = monkeyParse.data;
-    console.log("Added..............", formdata);
 
-    // store.type_attributes.push(formdata);
-    // store.type_attributes.pushIfNotExist(formdata, function (e: any) {
-    //   return e.attribute_id === formdata.attribute_id;
-    // });
+    // store.attribute_add(formdata);
+
+    const atrName = store.attributes.find((o: any) => {
+      if (o.attribute_id === formdata.attribute_id) return o;
+    });
+    // formdata.attribute_name = atrName;
+    console.log("Added..............", atrName);
+
     if (
       !store.type_attributes.find(
         (o: any) => o.attribute_id === formdata.attribute_id
@@ -77,7 +80,7 @@ export const AddAttribute = () => {
       store.type_attributes.push(formdata);
     }
 
-    typePropertiesform.reset();
+    // typePropertiesform.reset();
   };
 
   const attribute_delete = (idx: number) => {

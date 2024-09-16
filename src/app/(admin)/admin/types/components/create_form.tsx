@@ -33,7 +33,12 @@ export default function CreateForm() {
   });
 
   const onTypeSubmit = async (typeFormData: z.infer<typeof TypesSchema>) => {
-    console.log(typeFormData.name);
+    const attribute_list = store.type_attributes;
+    const data = {
+      type: typeFormData,
+      attributes: attribute_list,
+    };
+    console.log(data);
   };
 
   return (

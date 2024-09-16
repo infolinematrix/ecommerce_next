@@ -18,6 +18,7 @@ import { AddAttribute } from "./add_attributes";
 import StoreProvider, { useTypes } from "../lib/store";
 import { date } from "drizzle-orm/mysql-core";
 import { useStore } from "zustand";
+import api from "@/lib/apiClient";
 
 export default function CreateForm() {
   const store: any = useTypes();
@@ -32,13 +33,30 @@ export default function CreateForm() {
     },
   });
 
-  const onTypeSubmit = async (typeFormData: z.infer<typeof TypesSchema>) => {
-    const attribute_list = store.type_attributes;
-    const data = {
-      type: typeFormData,
-      attributes: attribute_list,
-    };
-    console.log(data);
+  const onTypeSubmit = async (typeFormData: any) => {
+    // let newFormData = new FormData();
+    // newFormData.append("type", "{name: 'asadsa'}");
+    const monkeyParse = TypesSchema.safeParse(typeFormData);
+    const data = monkeyParse.data;
+
+    // const postData = {
+    //   type: data,
+    //   attributes: store.type_attributes,
+    // };
+
+    const postData = new FormData();
+    postData.append("type", JSON.stringify(data));
+    postData.append("attributes", JSON.stringify(store.type_attributes));
+
+    const response = await api.post(`/admin/types/create/api`, postData, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    if (response && response.status != 200) {
+      console.log("ERROR : ", response.statusText);
+    }
   };
 
   return (

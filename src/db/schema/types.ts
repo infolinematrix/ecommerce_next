@@ -1,15 +1,10 @@
 import {
-  pgEnum,
   pgTable,
   uuid,
   text,
-  varchar,
   integer,
-  foreignKey,
   index,
-  unique,
   boolean,
-  jsonb,
 } from "drizzle-orm/pg-core";
 import { lifecycleDates } from "../utils";
 import { relations } from "drizzle-orm/relations";
@@ -21,7 +16,6 @@ export const types = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
     name: text("name").notNull().unique(),
     identifier: text("identifier").notNull().unique(),
-    meta: jsonb("meta"),
 
     ...lifecycleDates,
   },

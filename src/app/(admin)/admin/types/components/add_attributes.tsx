@@ -64,16 +64,22 @@ export const AddAttribute = () => {
 
     const formdata = monkeyParse.data;
 
-    // store.attribute_add(formdata);
+    // add name to render table data;
     store.attributes.find((i: any) => {
       if (i.id === formdata.attribute_id) {
         formdata.attribute_name = i.name;
       }
     });
-    // const atrName = store.attributes.find((o: any) => {
-    //   if (o.attribute_id === formdata.attribute_id) return o;
-    // });
-    // formdata.attribute_name = atrName;
+
+    if (
+      !store.type_attributes.find(
+        (o: any) => o.attribute_id === formdata.attribute_id
+      )
+    ) {
+      // [...state.type_attributes, formdata];
+      store.type_attributes.push(formdata);
+    }
+
     console.log("Added..............", formdata);
 
     if (
@@ -84,7 +90,7 @@ export const AddAttribute = () => {
       store.type_attributes.push(formdata);
     }
 
-    // typePropertiesform.reset();
+    typePropertiesform.reset();
   };
 
   const attribute_delete = (idx: number) => {
@@ -181,7 +187,7 @@ export const AddAttribute = () => {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                            <SelectLabel>Filterable</SelectLabel>
+                            <SelectLabel>Price variant</SelectLabel>
                             <SelectItem value="false">No</SelectItem>
                             <SelectItem value="true">Yes</SelectItem>
                           </SelectGroup>
@@ -212,7 +218,7 @@ export const AddAttribute = () => {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                            <SelectLabel>Filterable</SelectLabel>
+                            <SelectLabel>Required</SelectLabel>
                             <SelectItem value="false">No</SelectItem>
                             <SelectItem value="true">Yes</SelectItem>
                           </SelectGroup>

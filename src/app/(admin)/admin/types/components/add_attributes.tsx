@@ -63,6 +63,13 @@ export const AddAttribute = () => {
     }
 
     const formdata = monkeyParse.data;
+
+    //--add attribute name to formdata
+    store.attributes.find((i: any) => {
+      if (i.id === formdata.attribute_id) {
+        formdata.attribute_name = i.name;
+      }
+    });
     console.log("Added..............", formdata);
 
     // store.type_attributes.push(formdata);
@@ -76,8 +83,6 @@ export const AddAttribute = () => {
     ) {
       store.type_attributes.push(formdata);
     }
-
-    typePropertiesform.reset();
   };
 
   const attribute_delete = (idx: number) => {
@@ -247,7 +252,7 @@ export const AddAttribute = () => {
               store.type_attributes.map((item: any, index: number) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium">
-                    {item.attribute_id}
+                    {item.attribute_name}
                   </TableCell>
                   <TableCell>{item.filterable ? "Yes" : "No"}</TableCell>
                   <TableCell>{item.price_varient ? "Yes" : "No"}</TableCell>

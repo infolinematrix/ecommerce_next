@@ -25,7 +25,7 @@ export default async function TypeCreatePage() {
             <div className="flex flex-row gap-4 justify-between">
               <PageHeader>
                 <>
-                  <PageHeaderHeading size="md">Create</PageHeaderHeading>
+                  <PageHeaderHeading size="md">Type Create</PageHeaderHeading>
                   <PageHeaderDescription size="sm">
                     Manage your product types and attributes
                   </PageHeaderDescription>
@@ -34,8 +34,6 @@ export default async function TypeCreatePage() {
               <></>
             </div>
 
-            <div className="pt-4">Form Start</div>
-
             <div className="pt-4">
               <StoreProvider data={attributes}>
                 <CreateForm />
@@ -43,7 +41,7 @@ export default async function TypeCreatePage() {
             </div>
           </ScrollArea>
         </div>
-        <div className="flex w-1/3">Help</div>
+        <div className="flex w-1/3"></div>
       </div>
     </Shell>
   );

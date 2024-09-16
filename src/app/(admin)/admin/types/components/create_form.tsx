@@ -39,7 +39,11 @@ export default function CreateForm() {
   return (
     <>
       <Form {...typeForm}>
-        <form noValidate onSubmit={typeForm.handleSubmit(onTypeSubmit)}>
+        <form
+          noValidate
+          onSubmit={typeForm.handleSubmit(onTypeSubmit)}
+          id="typForm"
+        >
           <div className="flex flex-row gap-4 justify-between">
             <div className="w-full">
               <FormField
@@ -91,133 +95,10 @@ export default function CreateForm() {
         </form>
       </Form>
 
-      {/* <Form {...typePropertiesform}>
-        <form
-          noValidate
-          onSubmit={typeForm.handleSubmit(onTypePropertiesSubmit)}
-        >
-          <div className="flex flex-row gap-4 justify-stretch mt-8">
-            <div className="w-1/2">
-              <FormField
-                control={typePropertiesform.control}
-                name="attribute_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Attribute</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(ev) => {
-                          // field.onChange(ev);
-                          // showValueInput(ev);
-                        }}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select input" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {attributeInputTypes.map((item) => (
-                            <SelectItem key={item.value} value={item.value}>
-                              {item.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
-            </div>
-            <div>
-              <FormField
-                control={typePropertiesform.control}
-                name="filterable"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Filterable</FormLabel>
-                    <FormControl>
-                      <Select>
-                        <SelectTrigger className="w-[130px]">
-                          <SelectValue placeholder="Select -" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Filterable</SelectLabel>
-                            <SelectItem value="No">No</SelectItem>
-                            <SelectItem value="Yes">Yes</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
-            </div>
-            <div>
-              <FormField
-                control={typePropertiesform.control}
-                name="price_varient"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price variant</FormLabel>
-                    <FormControl>
-                      <Select>
-                        <SelectTrigger className="w-[130px]">
-                          <SelectValue placeholder="Select -" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Filterable</SelectLabel>
-                            <SelectItem value="No">No</SelectItem>
-                            <SelectItem value="Yes">Yes</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
-            </div>
-            <div>
-              <FormField
-                control={typePropertiesform.control}
-                name="required"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Required</FormLabel>
-                    <FormControl>
-                      <Select>
-                        <SelectTrigger className="w-[130px]">
-                          <SelectValue placeholder="Select -" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Filterable</SelectLabel>
-                            <SelectItem value="No">No</SelectItem>
-                            <SelectItem value="Yes">Yes</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
-            </div>
-            <div>
-              <FormItem>
-                <FormLabel>...</FormLabel>
-                <FormControl>
-                  <Button variant={"secondary"}>Add</Button>
-                </FormControl>
-              </FormItem>
-            </div>
-          </div>
-        </form>
-      </Form> */}
-
       <AddAttribute></AddAttribute>
 
       <div className="mt-10">
-        <Button>Save Type</Button>
+        <Button form="typForm">Save Type</Button>
       </div>
     </>
   );

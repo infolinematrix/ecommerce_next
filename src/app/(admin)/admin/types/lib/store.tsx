@@ -10,8 +10,6 @@ export default function StoreProvider({ data, children }: Props) {
   //--initial state
   useTypes.setState({
     attributes: data,
-
-    // ...
   });
 
   // ...

@@ -64,18 +64,18 @@ export const AddAttribute = () => {
 
     const formdata = monkeyParse.data;
 
-    //--add attribute name to formdata
+    // store.attribute_add(formdata);
     store.attributes.find((i: any) => {
       if (i.id === formdata.attribute_id) {
         formdata.attribute_name = i.name;
       }
     });
+    // const atrName = store.attributes.find((o: any) => {
+    //   if (o.attribute_id === formdata.attribute_id) return o;
+    // });
+    // formdata.attribute_name = atrName;
     console.log("Added..............", formdata);
 
-    // store.type_attributes.push(formdata);
-    // store.type_attributes.pushIfNotExist(formdata, function (e: any) {
-    //   return e.attribute_id === formdata.attribute_id;
-    // });
     if (
       !store.type_attributes.find(
         (o: any) => o.attribute_id === formdata.attribute_id
@@ -83,6 +83,8 @@ export const AddAttribute = () => {
     ) {
       store.type_attributes.push(formdata);
     }
+
+    // typePropertiesform.reset();
   };
 
   const attribute_delete = (idx: number) => {

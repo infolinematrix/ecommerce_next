@@ -10,8 +10,6 @@ export default function StoreProvider({ data, children }: Props) {
   //--initial state
   useTypes.setState({
     attributes: data,
-
-    // ...
   });
 
   // ...
@@ -30,4 +28,16 @@ export const useTypes = create((set): any => ({
         ...state.type_attributes.slice(index + 1),
       ],
     })),
+
+  attribute_add: (formdata: any) => {
+    set((state: any) => {
+      if (
+        !state.type_attributes.find(
+          (o: any) => o.attribute_id === formdata.attribute_id
+        )
+      ) {
+        [...state.type_attributes, formdata];
+      }
+    });
+  },
 }));

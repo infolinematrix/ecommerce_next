@@ -15,8 +15,6 @@ import StoreProvider from "../lib/store";
 export default async function TypeCreatePage() {
   const attributes = await getAttributes();
 
-  console.log(attributes?.length);
-
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">
@@ -41,7 +39,10 @@ export default async function TypeCreatePage() {
             </div>
           </ScrollArea>
         </div>
-        <div className="flex w-1/3"></div>
+        <div className="flex w-1/3 flex-col">
+          <div>Help</div>
+          <div></div>
+        </div>
       </div>
     </Shell>
   );

@@ -33,7 +33,12 @@ export default function CreateForm() {
   });
 
   const onTypeSubmit = async (typeFormData: z.infer<typeof TypesSchema>) => {
-    console.log("sadsfds");
+    const attribute_list = store.type_attributes;
+    const data = {
+      type: typeFormData,
+      attributes: attribute_list,
+    };
+    console.log(data);
   };
 
   return (
@@ -41,9 +46,8 @@ export default function CreateForm() {
       <Form {...typeForm}>
         <form
           noValidate
-          name="typF"
-          id="typF"
           onSubmit={typeForm.handleSubmit(onTypeSubmit)}
+          id="typForm"
         >
           <div className="flex flex-row gap-4 justify-between">
             <div className="w-full">
@@ -99,9 +103,7 @@ export default function CreateForm() {
       <AddAttribute></AddAttribute>
 
       <div className="mt-10">
-        <Button type="submit" id="typF">
-          Save
-        </Button>
+        <Button form="typForm">Save Type</Button>
       </div>
     </>
   );

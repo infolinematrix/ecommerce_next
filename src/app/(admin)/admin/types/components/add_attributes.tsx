@@ -82,15 +82,7 @@ export const AddAttribute = () => {
 
     console.log("Added..............", formdata);
 
-    if (
-      !store.type_attributes.find(
-        (o: any) => o.attribute_id === formdata.attribute_id
-      )
-    ) {
-      store.type_attributes.push(formdata);
-    }
-
-    typePropertiesform.reset();
+    // typePropertiesform.reset();
   };
 
   const attribute_delete = (idx: number) => {

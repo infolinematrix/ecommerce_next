@@ -19,6 +19,7 @@ export default function StoreProvider({ data, children }: Props) {
 export const useTypes = create((set): any => ({
   attributes: [],
   type_attributes: [],
+
   add: () => set((state: any) => ({ count: state.count + 1 })),
 
   attribute_remove: (index: number) =>
@@ -28,4 +29,6 @@ export const useTypes = create((set): any => ({
         ...state.type_attributes.slice(index + 1),
       ],
     })),
+
+  attribute_add: (item: any) => set((state: any) => ({})),
 }));

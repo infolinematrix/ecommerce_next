@@ -8,8 +8,22 @@ import {
   PageHeaderHeading,
 } from "@/app/(admin)/components/page-header";
 import { Shell } from "@/app/(admin)/components/shell";
+import { get_types, remove_type } from "@/lib/actions/types";
+import { TypesType } from "@/db/schema/types";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
-export default function TypesPage() {
+export default async function TypesPage() {
+  const types = await get_types();
+
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">
@@ -31,7 +45,48 @@ export default function TypesPage() {
               </>
             </div>
 
-            <div className="pt-4">{/* <TableData data={data} /> */}</div>
+            <div className="pt-4">
+              <div>
+                <Table>
+                  <TableCaption>
+                    {types && types.length > 0
+                      ? "A list of your product types."
+                      : "No data found..."}
+                  </TableCaption>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+
+                      <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {types &&
+                      types.map((t: TypesType) => {
+                        return (
+                          <TableRow key={t.id}>
+                            <TableCell className="font-medium">
+                              {t.name}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <form action={remove_type}>
+                                <input
+                                  type="hidden"
+                                  name="id"
+                                  defaultValue={t.id}
+                                />
+                                <Button variant={"secondary"}>
+                                  <CrossCircledIcon></CrossCircledIcon>
+                                </Button>
+                              </form>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
           </ScrollArea>
         </div>
         <div className="flex w-1/3">sad</div>

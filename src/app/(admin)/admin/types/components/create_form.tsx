@@ -33,16 +33,9 @@ export default function CreateForm() {
     },
   });
 
-  const onTypeSubmit = async (typeFormData: any) => {
-    // let newFormData = new FormData();
-    // newFormData.append("type", "{name: 'asadsa'}");
+  const onTypeSubmit = async (typeFormData: z.infer<typeof TypesSchema>) => {
     const monkeyParse = TypesSchema.safeParse(typeFormData);
     const data = monkeyParse.data;
-
-    // const postData = {
-    //   type: data,
-    //   attributes: store.type_attributes,
-    // };
 
     const postData = new FormData();
     postData.append("type", JSON.stringify(data));

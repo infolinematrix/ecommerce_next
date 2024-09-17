@@ -1,0 +1,59 @@
+"use server";
+
+import { db } from "@/db";
+import { type_properties, types } from "@/db/schema/types";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+
+export const get_types = async () => {
+  try {
+    const data = await db.select().from(types);
+    return data;
+  } catch (error) {
+    console.log("Action Error: ", error);
+  }
+};
+
+export const remove_type = async (formData: FormData) => {
+  try {
+    const id: string = (await formData.get("id")?.toString()) || "";
+
+    console.log("Deleting ... ", id);
+
+    await db.delete(types).where(eq(types.id, id));
+    revalidatePath("get_types");
+
+    return true;
+  } catch (error) {
+    console.log("Action Error: ", error);
+  }
+};
+
+export const create_type = async (typ: any, atr: any) => {
+  try {
+    await db.transaction(async (tx) => {
+      const type_data = {
+        name: typ.name,
+        identifier: typ.identifier,
+      };
+      const result = await tx.insert(types).values(type_data).returning();
+
+      atr?.map(async (a: any) => {
+        console.log("===========VALUES====", result[0].id);
+
+        const attData = {
+          type_id: result[0].id,
+          attribute_id: a.attribute_id.toString().trim() || "",
+          filterable: a.filterable || false,
+          price_varient: a.price_varient || false,
+          required: a.required || false,
+        };
+        console.log("---------------", attData);
+        await tx.insert(type_properties).values(attData);
+        return true;
+      });
+    });
+  } catch (error) {
+    console.log("ACTION ERRR");
+  }
+};

@@ -67,3 +67,20 @@ export const create_type = async (typ: any, atr: any) => {
     console.log("ACTION ERRR");
   }
 };
+
+export const updateTypeById = async (id: string, formData: any) => {
+  try {
+    await db.transaction(async (tx) => {
+      const type_data = {
+        name: formData.type.name,
+        identifier: formData.type.identifier,
+      };
+
+      console.log("-------------------", type_data);
+      await db.update(types).set(type_data).where(eq(types.id, id));
+      return true;
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

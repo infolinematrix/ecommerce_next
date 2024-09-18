@@ -22,6 +22,7 @@ import { ListProperties } from "./list_properties";
 
 export default function UpdateForm() {
   const type = useTypeStore()((state: any) => state.type);
+  const properties = useTypeStore()((state: any) => state.properties);
 
   const typeForm = useForm<z.infer<typeof TypesSchema>>({
     resolver: zodResolver(TypesSchema),
@@ -29,24 +30,28 @@ export default function UpdateForm() {
     shouldUnregister: false,
     defaultValues: {
       name: type.name,
-      identifier: "",
+      identifier: type.identifier,
     },
   });
 
   const onTypeSubmit = async (typeFormData: z.infer<typeof TypesSchema>) => {
-    // const monkeyParse = TypesSchema.safeParse(typeFormData);
-    // const data = monkeyParse.data;
-    // const postData = new FormData();
-    // postData.append("type", JSON.stringify(data));
-    // postData.append("attributes", JSON.stringify(store.type_attributes));
-    // const response = await api.post(`/admin/types/create/api`, postData, {
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded",
-    //   },
-    // });
-    // if (response && response.status != 200) {
-    //   console.log("ERROR : ", response.statusText);
-    // }
+    const monkeyParse = TypesSchema.safeParse(typeFormData);
+    const data = monkeyParse.data;
+    const postData = new FormData();
+
+    postData.append("type_id", JSON.stringify(type.id.toString()));
+    postData.append("type", JSON.stringify(data));
+    postData.append("properties", JSON.stringify(properties));
+
+    const response = await api.put(`/admin/types/update/api`, postData, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+    if (response.status == 200) {
+      console.log("RESPONSE : ", response.statusText);
+      alert("Data saved...");
+    }
   };
 
   return (

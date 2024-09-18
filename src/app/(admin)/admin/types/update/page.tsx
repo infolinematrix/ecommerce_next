@@ -20,7 +20,6 @@ export default async function TypeUpdatePage({ searchParams }: Props) {
   const type = await get_type(id);
 
   const initialState = {
-    count: 10,
     attributes: attributes,
     type: type,
     properties: type?.type_properties,

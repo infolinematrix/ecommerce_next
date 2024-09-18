@@ -38,7 +38,7 @@ import { dummyList } from "@/lib/utils";
 import { z } from "zod";
 import { useTypes } from "../lib/store";
 
-export const AddAttribute = () => {
+export const AddAttributeForm = () => {
   const store: any = useTypes();
 
   const typePropertiesform = useForm<z.infer<typeof TypePropertiesSchema>>({
@@ -87,10 +87,7 @@ export const AddAttribute = () => {
     // typePropertiesform.reset();
   };
 
-  const attribute_delete = (idx: number) => {
-    const action = alert("Are you sure?");
-    store.attribute_remove(idx);
-  };
+  console.log("STORE--------", store);
 
   return (
     <>
@@ -118,11 +115,12 @@ export const AddAttribute = () => {
                           <SelectValue placeholder="Select input" />
                         </SelectTrigger>
                         <SelectContent>
-                          {store.attributes.map((item: any) => (
-                            <SelectItem key={item.id} value={item.id}>
-                              {item.name}
-                            </SelectItem>
-                          ))}
+                          {/* {store.attributes &&
+                            store.attributes.map((item: any) => (
+                              <SelectItem key={item.id} value={item.id}>
+                                {item.name}
+                              </SelectItem>
+                            ))} */}
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -236,42 +234,6 @@ export const AddAttribute = () => {
           </div>
         </form>
       </Form>
-
-      <div className="mt-6">
-        <Table>
-          <TableCaption>A list of attributes.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[300px]">Attribute</TableHead>
-              <TableHead>Filterable</TableHead>
-              <TableHead>Price variant</TableHead>
-              <TableHead>Required</TableHead>
-              <TableHead className="text-right">Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {store.type_attributes &&
-              store.type_attributes.map((item: any, index: number) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">
-                    {item.attribute_name}
-                  </TableCell>
-                  <TableCell>{item.filterable ? "Yes" : "No"}</TableCell>
-                  <TableCell>{item.price_varient ? "Yes" : "No"}</TableCell>
-                  <TableCell>{item.required ? "Yes" : "No"}</TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant={"secondary"}
-                      onClick={(ev) => attribute_delete(index)}
-                    >
-                      <CrossCircledIcon></CrossCircledIcon>
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </div>
     </>
   );
 };

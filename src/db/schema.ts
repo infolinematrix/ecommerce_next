@@ -9,7 +9,12 @@ import {
   attributeValuesRelations,
 } from "./schema/attributes";
 
-import { types, type_properties } from "./schema/types";
+import {
+  types,
+  type_properties,
+  typePropertiesRelations,
+  typesRelations,
+} from "./schema/types";
 
 export const schema = {
   // todos,
@@ -21,4 +26,6 @@ export const schema = {
   attributeValuesRelations,
   types,
   type_properties,
+  typesRelations,
+  typePropertiesRelations,
 };

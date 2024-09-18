@@ -5,7 +5,7 @@ import { type_properties, types } from "@/db/schema/types";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export const get_types = async () => {
+export const get_types = async (id: string | string[]) => {
   try {
     const data = await db.select().from(types);
     return data;
@@ -14,10 +14,20 @@ export const get_types = async () => {
   }
 };
 
-export const remove_type = async (formData: FormData) => {
+export const get_type = async (id: string) => {
   try {
-    const id: string = (await formData.get("id")?.toString()) || "";
+    const data = await db.query.types.findFirst({
+      where: eq(types.id, id),
+      with: { type_properties: true },
+    });
+    return data;
+  } catch (error) {
+    console.log("Action Error: ", error);
+  }
+};
 
+export const remove_type = async (id: string) => {
+  try {
     console.log("Deleting ... ", id);
 
     await db.delete(types).where(eq(types.id, id));

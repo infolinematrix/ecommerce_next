@@ -20,6 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { DeleteTypeButton } from "./components/delete_type_button";
 
 export default async function TypesPage() {
   const types = await get_types();
@@ -66,19 +67,12 @@ export default async function TypesPage() {
                         return (
                           <TableRow key={t.id}>
                             <TableCell className="font-medium">
-                              {t.name}
+                              <Link href={"/admin/types/update?id=" + t.id}>
+                                {t.name}
+                              </Link>
                             </TableCell>
                             <TableCell className="text-right">
-                              <form action={remove_type}>
-                                <input
-                                  type="hidden"
-                                  name="id"
-                                  defaultValue={t.id}
-                                />
-                                <Button variant={"secondary"}>
-                                  <CrossCircledIcon></CrossCircledIcon>
-                                </Button>
-                              </form>
+                              <DeleteTypeButton id={t.id}></DeleteTypeButton>
                             </TableCell>
                           </TableRow>
                         );

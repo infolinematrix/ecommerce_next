@@ -1,52 +1,40 @@
 "use client";
-import React, { useState, createContext, useContext } from "react";
+import { index } from "drizzle-orm/mysql-core";
+import React, { useState, createContext, useContext, useRef } from "react";
+import { set } from "zod";
 import { create } from "zustand";
-
-const createStore = (count: number) =>
-  create<{
-    count: number;
-    setCount: (cart: number) => void;
-  }>((set) => ({
-    count,
-    setCount(count: number) {
-      set({ count });
-    },
-  }));
-
-const CountContext = createContext<ReturnType<typeof createStore> | null>(null);
-
-export const useCount = () => {
-  if (!CountContext)
-    throw new Error("useCount must be used within a CountProvider");
-  return useContext(CountContext)!;
-};
-
-const CountProvider = ({
-  count,
-  children,
-}: {
-  count: number;
-  children: React.ReactNode;
-}) => {
-  const [store] = useState(() => createStore(count));
-  return (
-    <CountContext.Provider value={store}>{children}</CountContext.Provider>
-  );
-};
-
-export default CountProvider;
 
 //==========================================================================================
 //-- type store
 
-const createTypeStore = (state: null) => {};
+const createTypeStore = (state: any | null) =>
+  create((set) => {
+    return {
+      ...state,
 
-const TypeContext = createContext<ReturnType<typeof createTypeStore>>;
+      add_property: (index: number) => {
+        console.log("Property Deleted..", state.properties);
+      },
 
-export const useType = () => {
+      delete_property: (index: number) =>
+        set((state: any) => ({
+          properties: [
+            ...state.properties.slice(0, index),
+            ...state.properties.slice(index + 1),
+          ],
+        })),
+    };
+  });
+
+const TypeContext = createContext<ReturnType<typeof createTypeStore> | null>(
+  null
+);
+
+export const useTypeStore = () => {
   if (!TypeContext)
     throw new Error("useType must be used within a TypeProvider");
-  return useContext(CountContext)!;
+
+  return useContext(TypeContext)!;
 };
 
 export const TypeProvider = ({
@@ -56,8 +44,7 @@ export const TypeProvider = ({
   initState: any;
   children: React.ReactNode;
 }) => {
-  const [store] = useState(() => createStore(initState));
-  return (
-    <CountContext.Provider value={store}>{children}</CountContext.Provider>
-  );
+  const [store] = useState(() => createTypeStore(initState));
+
+  return <TypeContext.Provider value={store}>{children}</TypeContext.Provider>;
 };

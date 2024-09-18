@@ -5,13 +5,10 @@ import {
 } from "@/app/(admin)/components/page-header";
 import { Shell } from "@/app/(admin)/components/shell";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import StoreProvider from "../lib/store";
-import CreateForm from "../components/create_form";
-import { get_type, get_types } from "@/lib/actions/types";
-import { ListProperties } from "../components/list_properties";
+import { get_type } from "@/lib/actions/types";
 import { getAttributes } from "@/lib/actions/attributes";
-import { AddAttribute } from "../components/add_attributes";
-import { AddAttributeForm } from "../components/add_attribute_form";
+import { TypeProvider } from "../lib/zustandStore";
+import UpdateForm from "../components/update_form";
 
 interface Props {
   searchParams: { [key: string]: string | string[] };
@@ -23,12 +20,13 @@ export default async function TypeUpdatePage({ searchParams }: Props) {
   const type = await get_type(id);
 
   const initialState = {
+    count: 10,
     attributes: attributes,
     type: type,
     properties: type?.type_properties,
   };
 
-  //   console.log("-------------------", initialState);
+  // console.log("-------------------", initialState.attributes);
 
   return (
     <div>
@@ -49,13 +47,9 @@ export default async function TypeUpdatePage({ searchParams }: Props) {
               </div>
 
               <div className="pt-4">
-                <StoreProvider props={initialState}>
-                  {/* <CreateForm />
-                  <AddAttributeForm />
-                  <ListProperties properties={type?.type_properties} /> */}
-                  <AddAttributeForm />
-                  <div>asdsad</div>
-                </StoreProvider>
+                <TypeProvider initState={initialState}>
+                  <UpdateForm />
+                </TypeProvider>
 
                 {/* <TypesStoreProvider>
                   <div>Hello</div>

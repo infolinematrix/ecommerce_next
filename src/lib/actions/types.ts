@@ -5,7 +5,7 @@ import { type_properties, types } from "@/db/schema/types";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export const get_types = async (id: string | string[]) => {
+export const get_types = async () => {
   try {
     const data = await db.select().from(types);
     return data;

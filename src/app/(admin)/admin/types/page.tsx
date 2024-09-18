@@ -8,7 +8,7 @@ import {
   PageHeaderHeading,
 } from "@/app/(admin)/components/page-header";
 import { Shell } from "@/app/(admin)/components/shell";
-import { get_types, remove_type } from "@/lib/actions/types";
+import { get_types } from "@/lib/actions/types";
 import { TypesType } from "@/db/schema/types";
 import {
   Table,
@@ -24,7 +24,6 @@ import { DeleteTypeButton } from "./components/delete_type_button";
 
 export default async function TypesPage() {
   const types = await get_types();
-
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">

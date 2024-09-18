@@ -9,17 +9,6 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { attributeInputTypes } from "@/lib/constants";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   Select,
   SelectTrigger,
@@ -33,14 +22,10 @@ import { useForm } from "react-hook-form";
 import { TypePropertiesSchema } from "../lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { CrossCircledIcon } from "@radix-ui/react-icons";
-import { dummyList } from "@/lib/utils";
 import { z } from "zod";
-import { useTypes } from "../lib/store";
+import { useTypeStore } from "../lib/zustandStore";
 
-export const AddAttributeForm = () => {
-  const store: any = useTypes();
-
+export const AddAttributeForm__________ = () => {
   const typePropertiesform = useForm<z.infer<typeof TypePropertiesSchema>>({
     resolver: zodResolver(TypePropertiesSchema),
     mode: "onChange",
@@ -67,27 +52,29 @@ export const AddAttributeForm = () => {
     const formdata = monkeyParse.data;
 
     // add name to render table data;
-    store.attributes.find((i: any) => {
-      if (i.id === formdata.attribute_id) {
-        formdata.attribute_name = i.name;
-      }
-    });
+    // store.attributes.find((i: any) => {
+    //   if (i.id === formdata.attribute_id) {
+    //     formdata.attribute_name = i.name;
+    //   }
+    // });
 
-    if (
-      !store.type_attributes.find(
-        (o: any) => o.attribute_id === formdata.attribute_id
-      )
-    ) {
-      // [...state.type_attributes, formdata];
-      store.type_attributes.push(formdata);
-    }
+    // if (
+    //   !store.type_attributes.find(
+    //     (o: any) => o.attribute_id === formdata.attribute_id
+    //   )
+    // ) {
+    //   // [...state.type_attributes, formdata];
+    //   store.type_attributes.push(formdata);
+    // }
 
     console.log("Added..............", formdata);
 
     // typePropertiesform.reset();
   };
 
-  console.log("STORE--------", store);
+  const attributes = useTypeStore()((state: any) => state.attributes);
+
+  // console.log("STORE---==---", attributes);
 
   return (
     <>
@@ -115,12 +102,12 @@ export const AddAttributeForm = () => {
                           <SelectValue placeholder="Select input" />
                         </SelectTrigger>
                         <SelectContent>
-                          {/* {store.attributes &&
-                            store.attributes.map((item: any) => (
+                          {attributes &&
+                            attributes.map((item: any) => (
                               <SelectItem key={item.id} value={item.id}>
                                 {item.name}
                               </SelectItem>
-                            ))} */}
+                            ))}
                         </SelectContent>
                       </Select>
                     </FormControl>

@@ -10,10 +10,10 @@ export async function PUT(request: Request) {
     const properties = JSON.parse(formData.get("properties")?.toString() || "");
 
     const result = await updateTypeById(type_id, { type, properties });
-    // console.log("--ROUTE---", result);
 
-    return NextResponse.json(true);
+    return NextResponse.json(result);
   } catch (error) {
     console.log("ROUTE ERROR..", error);
+    return NextResponse.json(false);
   }
 }

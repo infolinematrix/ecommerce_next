@@ -82,5 +82,6 @@ export const updateTypeById = async (id: string, formData: any) => {
     });
   } catch (error) {
     console.log(error);
+    return false;
   }
 };

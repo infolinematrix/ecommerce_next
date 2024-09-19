@@ -22,8 +22,8 @@ export const ListProperties = () => {
   const count = useTypeStore()((state: any) => state.count);
 
   const deleteProp = (idx: number) => {
-    const action = alert("Are you sure?");
-    delete_property(idx);
+    const action = confirm("Are you sure?");
+    if (action) delete_property(idx);
   };
 
   const attribute_name = (id: string) => {
@@ -63,6 +63,7 @@ export const ListProperties = () => {
                       <TableCell className="text-right">
                         <Button
                           variant={"secondary"}
+                          size={"sm"}
                           onClick={() => deleteProp(index)}
                         >
                           <CrossCircledIcon></CrossCircledIcon>

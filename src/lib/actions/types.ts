@@ -2,8 +2,9 @@
 
 import { db } from "@/db";
 import { type_properties, types } from "@/db/schema/types";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { exit } from "process";
 
 export const get_types = async () => {
   try {
@@ -39,16 +40,16 @@ export const remove_type = async (id: string) => {
   }
 };
 
-export const create_type = async (typ: any, atr: any) => {
+export const create_type = async (formData: any) => {
   try {
     await db.transaction(async (tx) => {
       const type_data = {
-        name: typ.name,
-        identifier: typ.identifier,
+        name: formData.type.name,
+        identifier: formData.type.identifier,
       };
       const result = await tx.insert(types).values(type_data).returning();
 
-      atr?.map(async (a: any) => {
+      formData.properties?.map(async (a: any) => {
         console.log("===========VALUES====", result[0].id);
 
         const attData = {
@@ -70,16 +71,42 @@ export const create_type = async (typ: any, atr: any) => {
 
 export const updateTypeById = async (id: string, formData: any) => {
   try {
-    await db.transaction(async (tx) => {
-      const type_data = {
-        name: formData.type.name,
-        identifier: formData.type.identifier,
-      };
+    await db.transaction(
+      async (tx) => {
+        const type_data = {
+          name: formData.type.name,
+          identifier: formData.type.identifier,
+        };
 
-      console.log("-------------------", type_data);
-      await db.update(types).set(type_data).where(eq(types.id, id));
-      return true;
-    });
+        // console.log("-------------------", type_data);
+        await db.update(types).set(type_data).where(eq(types.id, id));
+
+        console.log("-------deleting properties--------");
+        await tx
+          .delete(type_properties)
+          .where(and(eq(type_properties.type_id, id)));
+
+        formData.properties?.map(async (p: any) => {
+          const propsData = {
+            type_id: id,
+            attribute_id: p.attribute_id.toString().trim() || "",
+            filterable: p.filterable || false,
+            price_varient: p.price_varient || false,
+            required: p.required || false,
+          };
+
+          console.log("-----Adding-----");
+          await tx.insert(type_properties).values(propsData);
+        });
+
+        return true;
+      },
+      {
+        isolationLevel: "read committed",
+        accessMode: "read write",
+        deferrable: true,
+      }
+    );
   } catch (error) {
     console.log(error);
     return false;

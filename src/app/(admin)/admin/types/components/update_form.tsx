@@ -50,7 +50,7 @@ export default function UpdateForm() {
     });
     if (response.status == 200) {
       console.log("RESPONSE : ", response.statusText);
-      alert("Data saved...");
+      // alert("Data saved...");
     }
   };
 

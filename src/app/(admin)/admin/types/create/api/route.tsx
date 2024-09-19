@@ -13,13 +13,11 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
 
-    const fType = formData.get("type") || "";
-    const fAttributes = formData.get("attributes") || "";
-    const typ = JSON.parse(fType.toString());
-    const atr = JSON.parse(fAttributes.toString());
+    const type = JSON.parse(formData.get("type")?.toString() || "");
+    const properties = JSON.parse(formData.get("properties")?.toString() || "");
 
-    console.log("===========VALUES====", typ.name);
-    const result = await create_type(typ, atr);
+    console.log("===========Inserting====");
+    const result = await create_type({ type, properties });
 
     return NextResponse.json(result);
   } catch (error) {

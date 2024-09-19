@@ -11,10 +11,14 @@ import { Shell } from "@/app/(admin)/components/shell";
 import CreateForm from "../components/create_form";
 import { getAttributes } from "@/lib/actions/attributes";
 import StoreProvider from "../lib/store";
+import { TypeProvider } from "../lib/zustandStore";
 
 export default async function TypeCreatePage() {
   const attributes = await getAttributes();
-
+  const initialState = {
+    attributes: attributes,
+    properties: [],
+  };
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">
@@ -33,9 +37,9 @@ export default async function TypeCreatePage() {
             </div>
 
             <div className="pt-4">
-              <StoreProvider data={attributes}>
+              <TypeProvider initState={initialState}>
                 <CreateForm />
-              </StoreProvider>
+              </TypeProvider>
             </div>
           </ScrollArea>
         </div>

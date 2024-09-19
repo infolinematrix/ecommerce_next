@@ -19,10 +19,10 @@ import StoreProvider, { useTypes } from "../lib/store";
 import { date } from "drizzle-orm/mysql-core";
 import { useStore } from "zustand";
 import api from "@/lib/apiClient";
+import { useTypeStore } from "../lib/zustandStore";
 
 export default function CreateForm() {
-  const store: any = useTypes();
-
+  const properties = useTypeStore()((state: any) => state.properties);
   const typeForm = useForm<z.infer<typeof TypesSchema>>({
     resolver: zodResolver(TypesSchema),
     mode: "onChange",
@@ -39,7 +39,7 @@ export default function CreateForm() {
 
     const postData = new FormData();
     postData.append("type", JSON.stringify(data));
-    postData.append("attributes", JSON.stringify(store.type_attributes));
+    postData.append("properties", JSON.stringify(properties));
 
     const response = await api.post(`/admin/types/create/api`, postData, {
       headers: {
@@ -47,8 +47,8 @@ export default function CreateForm() {
       },
     });
 
-    if (response && response.status != 200) {
-      console.log("ERROR : ", response.statusText);
+    if (response && response.status == 200) {
+      alert("Saved.....");
     }
   };
 

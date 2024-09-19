@@ -9,9 +9,11 @@ export async function PUT(request: Request) {
     const type = JSON.parse(formData.get("type")?.toString() || "");
     const properties = JSON.parse(formData.get("properties")?.toString() || "");
 
+    const isLoading = true;
+
     const result = await updateTypeById(type_id, { type, properties });
 
-    return NextResponse.json(result);
+    return NextResponse.json({});
   } catch (error) {
     console.log("ROUTE ERROR..", error);
     return NextResponse.json(false);

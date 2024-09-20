@@ -2,15 +2,24 @@
 
 import { create } from "zustand";
 import React, { useState, createContext, useContext, useRef } from "react";
+import { stat } from "fs";
 
 const createAttributeStore = (state: any | null) =>
   create((set) => {
     return {
       ...state,
-      add_value: (index: number) => {
-        console.log("Property Deleted..", state.values);
-      },
+      add_value: (value: string) => {
+        console.log("Property Deleted..", value);
 
+        set((state: any) => ({
+          values: [...state.values, value],
+        }));
+      },
+      reset_values: () => {
+        set((state: any) => ({
+          values: [],
+        }));
+      },
       delete_value: (index: number) =>
         set((state: any) => ({
           values: [

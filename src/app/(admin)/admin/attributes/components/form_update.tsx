@@ -26,7 +26,12 @@ import {
 import { AttributeType } from "@/db/schema/attributes";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import { CrossCircledIcon, RocketIcon } from "@radix-ui/react-icons";
+import {
+  CrossCircledIcon,
+  ReloadIcon,
+  UploadIcon,
+  RocketIcon,
+} from "@radix-ui/react-icons";
 import api from "@/lib/apiClient";
 import { deleteValesByAttributeId } from "@/lib/actions/attributes";
 import { Separator } from "@/components/ui/separator";
@@ -38,22 +43,49 @@ import {
   AttributeValueUpdateSchema,
 } from "../lib/types";
 import { useAttriubteStore } from "../lib/store";
-import { createAttributeSchema } from "../lib/schema";
+import { CreateAttributeSchema } from "../lib/schema";
 import { AttrubuteValuesForm } from "./attribute_values_form";
+import { SelectGroup } from "@radix-ui/react-select";
 
 export const UpdateForm = () => {
   const attribute = useAttriubteStore()((state: any) => state.attribute);
-  const form = createAttributeSchema(attribute);
+  const values = useAttriubteStore()((state: any) => state.values);
+  const reset_values = useAttriubteStore()((state: any) => state.reset_values);
+  const form = CreateAttributeSchema(attribute);
 
-  const [showValue, setshowValue] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+
+  const [showValue, setshowValue] = useState(values.length > 0);
   const showValueInput = (ev: string) => {
     ["SELECT", "SELECT-MULTIPLE", "OPTIONS"].includes(ev.trim())
       ? setshowValue(true)
       : setshowValue(false);
-
-    console.log("------------", showValue);
   };
-  const onSubmitAttribute = () => {};
+  const onSubmitAttribute = async (
+    formData: z.infer<typeof AttributeUpdateSchema>
+  ) => {
+    setLoading(true);
+
+    const hasValue = ["TEXTBOX", "TEXTAREA"].includes(formData.input_type)
+      ? false
+      : true;
+
+    const finalData = {
+      id: attribute.id,
+      attribute: JSON.stringify(formData),
+      values: hasValue ? JSON.stringify(values) : JSON.stringify([]),
+    };
+    // console.log(finalData);
+
+    const response = await api.put(`/admin/attributes/update/api`, finalData, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+
+    setLoading(false);
+    console.log(response);
+  };
 
   return (
     <>
@@ -104,35 +136,39 @@ export const UpdateForm = () => {
 
           <div className="flex flex-row gap-4 justify-between mt-4">
             <div className="w-full">
-              <FormField
-                control={form.control}
-                name="input_type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Input</FormLabel>
-                    <FormControl>
-                      <Select
-                        defaultValue={field.value}
-                        onValueChange={(ev) => {
-                          field.onChange(ev);
-                          showValueInput(ev);
-                        }}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select input" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {attributeInputTypes.map((item) => (
-                            <SelectItem key={item.value} value={item.value}>
-                              {item.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <div>
+                <FormField
+                  control={form.control}
+                  name="input_type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Input</FormLabel>
+                      <FormControl>
+                        <Select
+                          defaultValue={field.value}
+                          onValueChange={(ev) => {
+                            field.onChange(ev);
+                            showValueInput(ev);
+                          }}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select input" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {attributeInputTypes.map((item) => (
+                                <SelectItem key={item.value} value={item.value}>
+                                  {item.label}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <div className="w-full">
@@ -150,22 +186,39 @@ export const UpdateForm = () => {
               />
             </div>
           </div>
+
+          <div className="mt-8">
+            {showValue ? (
+              <div>
+                <div className="my-6 text-sm ">
+                  Drizzle provides you the most SQL-like way to fetch data from
+                  your database, while remaining type-safe and composable. It
+                  natively supports mostly every query feature and capability of
+                  every dialect, and whatever it doesn’t support yet, can be
+                  added by the user with the powerful sql operator.
+                </div>
+                <Separator className="my-6" />
+                <AttrubuteValuesForm />
+              </div>
+            ) : (
+              <></>
+            )}
+            <div className="mt-10">
+              {isLoading ? (
+                <Button disabled>
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </Button>
+              ) : (
+                <Button>
+                  <UploadIcon className="mr-2 h-4 w-4" />
+                  Save
+                </Button>
+              )}
+            </div>
+          </div>
         </form>
       </Form>
-
-      {showValue ?? (
-        <div>
-          <div className="my-6 text-sm ">
-            Drizzle provides you the most SQL-like way to fetch data from your
-            database, while remaining type-safe and composable. It natively
-            supports mostly every query feature and capability of every dialect,
-            and whatever it doesn’t support yet, can be added by the user with
-            the powerful sql operator.
-          </div>
-          <Separator className="my-6" />
-          <AttrubuteValuesForm />
-        </div>
-      )}
     </>
   );
 };

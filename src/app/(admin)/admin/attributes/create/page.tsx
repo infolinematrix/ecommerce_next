@@ -4,14 +4,16 @@ import {
   PageHeaderDescription,
 } from "@/app/(admin)/components/page-header";
 import { Shell } from "@/app/(admin)/components/shell";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import Link from "next/link";
 
-import CreateForm from "../components/form_create";
 import CreateAttributeForm from "../components/form_create";
+import { AttriubteStoreProvider } from "../lib/store";
 
 export default function CreatePage() {
+  const initialState = {
+    attribute: {},
+    values: [],
+  };
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-row gap-8 justify-between">
@@ -28,7 +30,9 @@ export default function CreatePage() {
               </PageHeader>
             </div>
             <div className="pt-8">
-              <CreateAttributeForm />
+              <AttriubteStoreProvider initState={initialState}>
+                <CreateAttributeForm />
+              </AttriubteStoreProvider>
             </div>
           </ScrollArea>
         </div>

@@ -6,6 +6,7 @@ import {
   attributes,
   AttributeType,
 } from "@/db/schema/attributes";
+import { error } from "console";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { exit } from "process";
@@ -85,13 +86,6 @@ export const deleteValesByAttributeId = async (id: string) => {
 
 export const createValue = async (attribute_id: string, value: any) => {
   try {
-    const exist = await db.query.attribute_values.findFirst({
-      where: and(
-        eq(attribute_values.attribute_id, attribute_id),
-        eq(attribute_values.attribute_value, value)
-      ),
-    });
-
     // console.log(value, "======Exist==================", value);
     await db.insert(attribute_values).values({
       attribute_id: attribute_id,

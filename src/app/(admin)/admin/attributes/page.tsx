@@ -23,19 +23,9 @@ import { getAttributes, deleteAttributeById } from "@/lib/actions/attributes";
 import { AttributeType } from "@/db/schema/attributes";
 import { DeleteAttributeButton } from "./components/delete_button";
 
-// interface Props {
-//   param: string;
-//   searchParams: { [key: string]: string | string[] | undefined };
-// }
-
-// const deleteAttr = async () => {
-//   "use server";
-//   console.log("====================");
-// };
-
 export default async function AttributePage() {
   const data = await getAttributes();
-  // data ?? console.log("NO DATA");
+  data ?? console.log("NO DATA");
 
   return (
     <Shell variant="sidebar" className="overflow-hidden">

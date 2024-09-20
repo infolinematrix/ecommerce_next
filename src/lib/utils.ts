@@ -6,6 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+//------------------------------------------------------
+
 export function absoluteUrl(path: string) {
   return `${env.NEXT_PUBLIC_APP_URL}${path}`;
 }
@@ -100,6 +102,7 @@ export function isMacOs() {
   return window.navigator.userAgent.includes("Mac");
 }
 
-export const dummyList = Array.from({ length: 5 }).map(
-  (_, i, a) => `v1.2.0-beta.${a.length - i}`
-);
+export const dummyList = (length: number) =>
+  Array.from({ length: length }).map(
+    (_, i, a) => `v1.2.0-beta.${a.length - i}`
+  );

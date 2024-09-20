@@ -13,22 +13,29 @@ import {
   FormField,
   FormItem,
 } from "@/components/ui/form";
-import { valueSchema } from "../lib/schema";
+import { ValueSchema } from "../lib/schema";
 import { Input } from "@/components/ui/input";
 
 export const AttrubuteValuesForm = () => {
   const values = useAttriubteStore()((state: any) => state.values);
   const delete_value = useAttriubteStore()((state: any) => state.delete_value);
-  const valueForm = valueSchema();
+  const add_value = useAttriubteStore()((state: any) => state.add_value);
+  const valueForm = ValueSchema();
 
-  const addValue = (val: string) => {};
+  const addValue = (val: string) => {
+    if (!values.includes(val) && val != "") {
+      add_value(val);
+      valueForm.reset();
+    } else {
+      alert("Invalid..");
+    }
+  };
   const removeValue = (index: number) => {
     const action = confirm("Are you sure");
     if (action) {
       delete_value(index);
     }
   };
-  useEffect(() => {}, []);
 
   return (
     <>
@@ -64,7 +71,7 @@ export const AttrubuteValuesForm = () => {
         </Form>
       </div>
 
-      {values.length > 0 ? (
+      {values && values.length > 0 ? (
         <div className="mt-4">
           <Table>
             <TableBody>
@@ -88,7 +95,7 @@ export const AttrubuteValuesForm = () => {
           </Table>
         </div>
       ) : (
-        <>No data found....</>
+        <div className="pb-5">No data found....</div>
       )}
     </>
   );

@@ -7,59 +7,35 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { any, string, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { dummyList, slugify } from "@/lib/utils";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@radix-ui/react-label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { CameraIcon, HomeIcon, ImageIcon } from "@radix-ui/react-icons";
+import { slugify } from "@/lib/utils";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import Link from "next/link";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  AttributeCreateSchema,
-  AttributeValueCreateSchema,
-} from "../types/attribute_types";
+import { AttributeCreateSchema } from "../lib/types";
 import { attributeInputTypes } from "@/lib/constants";
 import api from "@/lib/apiClient";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
+import { useAttriubteStore } from "../lib/store";
+import { AttrubuteValuesForm } from "./attribute_values_form";
+import { ReloadIcon, UploadIcon } from "@radix-ui/react-icons";
 
 export default function CreateAttributeForm() {
   const [showValue, setshowValue] = useState(false);
   const router = useRouter();
-
+  const values = useAttriubteStore()((state: any) => state.values || []);
+  const [isLoading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof AttributeCreateSchema>>({
     resolver: zodResolver(AttributeCreateSchema),
     mode: "onChange",
@@ -69,15 +45,6 @@ export default function CreateAttributeForm() {
       identifier: "",
       custom_name: "",
       input_type: "",
-    },
-  });
-
-  const valueForm = useForm<z.infer<typeof AttributeValueCreateSchema>>({
-    resolver: zodResolver(AttributeValueCreateSchema),
-    mode: "onChange",
-    shouldUnregister: false,
-    defaultValues: {
-      attribute_value: "",
     },
   });
 
@@ -93,10 +60,11 @@ export default function CreateAttributeForm() {
     const formdata = monkeyParse.data;
 
     const data = {
-      attribute: formdata,
-      attribute_values: values,
+      attribute: JSON.stringify(formdata),
+      values: JSON.stringify(values),
     };
-    // console.log(data);
+
+    setLoading(true);
 
     const response = await api.post(`/admin/attributes/create/api`, data, {
       headers: {
@@ -110,31 +78,9 @@ export default function CreateAttributeForm() {
   }
 
   const showValueInput = (ev: string) => {
-    setValues([]);
-
-    ["TEXTBOX", "TEXTAREA"].includes(ev)
-      ? setshowValue(false)
-      : setshowValue(true);
-  };
-
-  const [values, setValues] = useState<string[]>([]);
-
-  const addValue = () => {
-    const val = valueForm.getValues("attribute_value").toString().trim();
-
-    if (!values.includes(val) && val != "") {
-      setValues([...values, val]);
-      valueForm.reset();
-    } else {
-      alert("Invalid..");
-    }
-  };
-
-  const deleteValue = (index: number) => {
-    const action = confirm("Are you sure");
-    if (action) {
-      setValues([...values.slice(0, index), ...values.slice(index + 1)]);
-    }
+    ["SELECT", "SELECT-MULTIPLE", "OPTIONS"].includes(ev.trim())
+      ? setshowValue(true)
+      : setshowValue(false);
   };
 
   return (
@@ -237,77 +183,40 @@ export default function CreateAttributeForm() {
               />
             </div>
           </div>
-          <div className="flex flex-row gap-4 pt-8">
-            <Button
-              type="button"
-              variant={"secondary"}
-              onClick={() => form.reset()}
-            >
-              Reset
-            </Button>
-            <Button type="submit">Create</Button>
+
+          <div className="mt-8">
+            {showValue == true ? (
+              <div>
+                <div className="my-6 text-sm ">
+                  Drizzle provides you the most SQL-like way to fetch data from
+                  your database, while remaining type-safe and composable. It
+                  natively supports mostly every query feature and capability of
+                  every dialect, and whatever it doesn’t support yet, can be
+                  added by the user with the powerful sql operator.
+                </div>
+                <Separator className="my-6" />
+                <AttrubuteValuesForm />
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+
+          <div className="mt-10">
+            {isLoading ? (
+              <Button disabled>
+                <UploadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button>
+                <UploadIcon className="mr-2 h-4 w-4" />
+                Save
+              </Button>
+            )}
           </div>
         </form>
       </Form>
-
-      <div className="mt-8">
-        {showValue == true ? (
-          <>
-            <Form {...valueForm}>
-              <div className="flex flex-row gap-4 justify-end">
-                <div className="w-[300px]">
-                  <FormField
-                    control={valueForm.control}
-                    name="attribute_value"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="Enter value" {...field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        {/* <FormMessage /> */}
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="w-fit">
-                  <Button type="button" onClick={addValue}>
-                    Add
-                  </Button>
-                </div>
-              </div>
-            </Form>
-            <Separator className="my-4" />
-          </>
-        ) : (
-          <></>
-        )}
-
-        {values.length > 0 ? (
-          <>
-            <Table>
-              <TableBody>
-                {values.map((value: string, index: number) => (
-                  <TableRow key={index}>
-                    <TableCell>{value}</TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        asChild
-                        variant={"secondary"}
-                        onClick={(ev) => deleteValue(index)}
-                      >
-                        <HomeIcon></HomeIcon>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </>
-        ) : (
-          <></>
-        )}
-      </div>
     </>
   );
 }

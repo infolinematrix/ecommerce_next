@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AttributeType } from "@/db/schema/attributes";
 
-export const createAttributeSchema = (attribute: AttributeType) => {
+export const CreateAttributeSchema = (attribute: AttributeType) => {
   return useForm<z.infer<typeof AttributeUpdateSchema>>({
     resolver: zodResolver(AttributeUpdateSchema),
     mode: "onChange",
@@ -18,7 +18,7 @@ export const createAttributeSchema = (attribute: AttributeType) => {
   });
 };
 
-export const valueSchema = () =>
+export const ValueSchema = () =>
   useForm<z.infer<typeof AttributeValueUpdateSchema>>({
     resolver: zodResolver(AttributeValueUpdateSchema),
     mode: "onChange",

@@ -19,7 +19,7 @@ function PageHeader({
   return (
     <Comp
       className={cn(
-        "flex max-w-[61.25rem] flex-col gap-1",
+        "flex _max-w-[61.25rem] flex-col gap-1",
         withPadding && "py-0 md:py-0 md:pb-0 lg:py-0 lg:pb-0",
         className
       )}
@@ -65,18 +65,18 @@ function PageHeaderHeading({
 }
 
 const descriptionVariants = cva(
-  "max-w-[46.875rem] text-balance text-muted-foreground",
+  "__max-w-[46.875rem] text-balance text-muted-foreground",
   {
     variants: {
       size: {
         default: "text-base sm:text-lg",
-        sm: "text-sm sm:text-base",
+        sm: "text-sm sm:text-md",
         md: "text-md sm:text-base",
         lg: "text-lg sm:text-xl",
       },
     },
     defaultVariants: {
-      size: "default",
+      size: "md",
     },
   }
 );
@@ -102,7 +102,7 @@ function PageActions({
   return (
     <div
       className={cn(
-        "flex w-full items-center justify-center space-x-4 py-4 md:pb-10",
+        "flex w-fit items-right justify-end space-x-0 py-0 _pb-10",
         className
       )}
       {...props}

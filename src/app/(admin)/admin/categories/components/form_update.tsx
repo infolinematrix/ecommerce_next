@@ -58,10 +58,6 @@ export default function UpdateForm({ category }: any) {
     <div>
       <Form {...form}>
         <form noValidate onSubmit={form.handleSubmit(onSubmit)} method="PUT">
-          <p className="pb-5 text-muted-foreground">
-            You are creating under{" "}
-            <span className="text-primary font-medium"></span>
-          </p>
           <FormItem hidden>
             <FormField
               control={form.control}
@@ -70,56 +66,50 @@ export default function UpdateForm({ category }: any) {
             ></FormField>
           </FormItem>
 
-          <div className="flex flex-row gap-4 justify-between">
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <>
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Name"
-                          {...field}
-                          onChange={(ev) => {
-                            field.onChange(ev);
-                            form.setValue(
-                              "identifier",
-                              slugify(ev.target.value)
-                            );
-                          }}
-                        ></Input>
-                      </FormControl>
-                    </FormItem>
-                  </>
-                )}
-              ></FormField>
-            </div>
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="identifier"
-                render={({ field }) => (
-                  <>
-                    <FormItem>
-                      <FormLabel>Identifier</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Identifier"
-                          {...field}
-                          disabled={true}
-                        ></Input>
-                      </FormControl>
-                    </FormItem>
-                  </>
-                )}
-              ></FormField>
-            </div>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <>
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Name"
+                        {...field}
+                        onChange={(ev) => {
+                          field.onChange(ev);
+                          form.setValue("identifier", slugify(ev.target.value));
+                        }}
+                      ></Input>
+                    </FormControl>
+                  </FormItem>
+                </>
+              )}
+            ></FormField>
+
+            <FormField
+              control={form.control}
+              name="identifier"
+              render={({ field }) => (
+                <>
+                  <FormItem>
+                    <FormLabel>Identifier</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Identifier"
+                        {...field}
+                        disabled={true}
+                      ></Input>
+                    </FormControl>
+                  </FormItem>
+                </>
+              )}
+            ></FormField>
           </div>
 
-          <div className="pt-4">
+          <div className="mt-4">
             <FormField
               control={form.control}
               name="short_description"

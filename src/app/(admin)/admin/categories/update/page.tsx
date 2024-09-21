@@ -9,6 +9,7 @@ import {
   PageHeader,
   PageHeaderHeading,
   PageHeaderDescription,
+  PageActions,
 } from "@/app/(admin)/components/page-header";
 import { Shell } from "@/app/(admin)/components/shell";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
@@ -38,47 +39,80 @@ export default async function CategoryUpdatePage({ searchParams }: Props) {
   };
 
   return (
-    <>
-      <Shell variant="sidebar" className="overflow-hidden">
+    <Shell variant="sidebar" className="overflow-hidden">
+      <div className="flex flex-col">
         <div className="flex flex-row gap-4 justify-between">
           <PageHeader>
-            <>
-              <PageHeaderHeading size="md">Update</PageHeaderHeading>
-              <PageHeaderDescription size="sm">
-                Update category for your products.
-              </PageHeaderDescription>
-            </>
+            <PageHeaderHeading size="md">Update</PageHeaderHeading>
+            <PageHeaderDescription size="sm">
+              Manage categories for your products.
+            </PageHeaderDescription>
           </PageHeader>
-          <></>
+
+          <PageActions></PageActions>
         </div>
-        <div className="flex flex-row gap-8 justify-between">
-          <div className="flex w-2/3">
-            <ScrollArea className="w-full px-4">
-              <div className="h-lg mb-20">
-                <UpdateForm category={category} />
+
+        <ScrollArea className="w-full pb-3.5 mt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 overflow-hidden">
+            <div className="lg:col-span-2">
+              <UpdateForm category={category} />
+            </div>
+
+            {/* -----------RIGHT------------------- */}
+            <div className="hidden md:block min-h-screen border-l _bg-primary-foreground rounded-lg p-4">
+              <div className="uppercase tracking-wide text-lg font-semibold">
+                Help
               </div>
 
-              <Alert variant="destructive">
-                <RocketIcon className="h-4 w-4" />
-                <AlertTitle>Delete!</AlertTitle>
-                <AlertDescription>
-                  On delete it remove all the child categories and all the
-                  related properties. Still you want to delete this category
-                  <span>
-                    <form action={deleteCategory} method="POST">
-                      <Button variant={"link"} type="submit" className="p-0">
-                        Click here
-                      </Button>
-                    </form>
-                  </span>
-                </AlertDescription>
-              </Alert>
-            </ScrollArea>
+              <p className="mt-2 text-slate-500">
+                Help & tutorial coming soon...
+              </p>
+            </div>
           </div>
+        </ScrollArea>
+      </div>
+    </Shell>
+    // <>
+    //   <Shell variant="sidebar" className="overflow-hidden">
+    //     <div className="flex flex-row gap-4 justify-between">
+    //       <PageHeader>
+    //         <>
+    //           <PageHeaderHeading size="md">Update</PageHeaderHeading>
+    //           <PageHeaderDescription size="sm">
+    //             Update category for your products.
+    //           </PageHeaderDescription>
+    //         </>
+    //       </PageHeader>
+    //       <></>
+    //     </div>
+    //     <div className="flex flex-row gap-8 justify-between">
+    //       <div className="flex w-2/3">
+    //         <ScrollArea className="w-full px-4">
+    //           <div className="h-lg mb-20">
+    //             <UpdateForm category={category} />
+    //           </div>
 
-          <div className="flex w-1/3">sad</div>
-        </div>
-      </Shell>
-    </>
+    //           <Alert variant="destructive">
+    //             <RocketIcon className="h-4 w-4" />
+    //             <AlertTitle>Delete!</AlertTitle>
+    //             <AlertDescription>
+    //               On delete it remove all the child categories and all the
+    //               related properties. Still you want to delete this category
+    //               <span>
+    //                 <form action={deleteCategory} method="POST">
+    //                   <Button variant={"link"} type="submit" className="p-0">
+    //                     Click here
+    //                   </Button>
+    //                 </form>
+    //               </span>
+    //             </AlertDescription>
+    //           </Alert>
+    //         </ScrollArea>
+    //       </div>
+
+    //       <div className="flex w-1/3">sad</div>
+    //     </div>
+    //   </Shell>
+    // </>
   );
 }

@@ -1,5 +1,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+  PageActions,
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
@@ -18,8 +19,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { get_parents } from "@/lib/actions/category";
-import { HomeIcon } from "@radix-ui/react-icons";
+import { HomeIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
 import { CategoryType } from "@/db/schemas/categories";
+import CreateForm from "./components/form_create";
 
 interface Props {
   // param: string;
@@ -33,42 +35,86 @@ export default async function CategoriesPage({ searchParams }: Props) {
 
   return (
     <Shell variant="sidebar" className="overflow-hidden">
-      <div className="flex flex-row gap-8 justify-between">
-        <div className="flex w-2/3">
-          <ScrollArea className="w-full pb-3.5">
-            <div className="flex flex-row gap-4 justify-between">
-              <PageHeader>
-                <>
-                  <PageHeaderHeading size="md">Categories</PageHeaderHeading>
-                  <PageHeaderDescription size="sm">
-                    Manage your account settings
-                  </PageHeaderDescription>
-                </>
-              </PageHeader>
-              <>
-                <Link
-                  href={{
-                    pathname: "/admin/categories/create/",
-                    query: { parent: searchParams.parent },
-                  }}
-                >
-                  <Button variant={"secondary"}>Create new </Button>
-                </Link>
-              </>
-            </div>
-            {/* {data && data.length > 0 ? (
-              <DataTable data />
-            ) : (
-              <div>Loading....</div>
-            )} */}
-            <div className="pt-4">
-              <TableData data={data} />
+      <div className="flex flex-col">
+        <div className="flex flex-row gap-4 justify-between">
+          <PageHeader>
+            <PageHeaderHeading size="md">Categories</PageHeaderHeading>
+            <PageHeaderDescription size="sm">
+              Manage categories for your products.
+            </PageHeaderDescription>
+          </PageHeader>
+
+          <PageActions>
+            <Link
+              href={{
+                pathname: "/admin/categories/create/",
+                query: { parent: searchParams.parent },
+              }}
+            >
+              <Button variant={"secondary"}>Create new </Button>
+            </Link>
+          </PageActions>
+        </div>
+
+        <div>
+          <ScrollArea className="w-full pb-3.5 mt-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 overflow-hidden">
+              <div className="lg:col-span-2">
+                <TableData data={data} />
+              </div>
+
+              {/* -----------RIGHT------------------- */}
+              <div className="hidden md:block min-h-screen border-l _bg-primary-foreground rounded-lg p-4">
+                <div className="uppercase tracking-wide text-lg font-semibold">
+                  Help
+                </div>
+
+                <p className="mt-2 text-slate-500">
+                  Help & tutorial coming soon...
+                </p>
+              </div>
             </div>
           </ScrollArea>
         </div>
-        <div className="flex w-1/3">sad</div>
       </div>
     </Shell>
+    // <Shell variant="sidebar" className="overflow-hidden">
+    //   <div className="flex flex-row gap-8 justify-between">
+    //     <div className="flex w-2/3">
+    //       <ScrollArea className="w-full pb-3.5">
+    //         <div className="flex flex-row gap-4 justify-between">
+    //           <PageHeader>
+    //             <>
+    //               <PageHeaderHeading size="md">Categories</PageHeaderHeading>
+    //               <PageHeaderDescription size="sm">
+    //                 Manage your account settings
+    //               </PageHeaderDescription>
+    //             </>
+    //           </PageHeader>
+    //           <>
+    //             <Link
+    //               href={{
+    //                 pathname: "/admin/categories/create/",
+    //                 query: { parent: searchParams.parent },
+    //               }}
+    //             >
+    //               <Button variant={"secondary"}>Create new </Button>
+    //             </Link>
+    //           </>
+    //         </div>
+    //         {/* {data && data.length > 0 ? (
+    //           <DataTable data />
+    //         ) : (
+    //           <div>Loading....</div>
+    //         )} */}
+    //         <div className="pt-4">
+    //           <TableData data={data} />
+    //         </div>
+    //       </ScrollArea>
+    //     </div>
+    //     <div className="flex w-1/3">sad</div>
+    //   </div>
+    // </Shell>
   );
 }
 
@@ -76,7 +122,7 @@ const TableData = ({ data }: any) => {
   return (
     <>
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableCaption>A list of your categories.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
@@ -109,10 +155,6 @@ const TableData = ({ data }: any) => {
                 {category.parent_id == null ? "Root" : category.parent_id}
               </TableCell>
               <TableCell className="text-right">
-                {/* <Button variant={"secondary"} className="">
-                  <HomeIcon />
-                </Button> */}
-
                 <Button asChild variant={"secondary"} className="">
                   <Link
                     href={{
@@ -120,19 +162,13 @@ const TableData = ({ data }: any) => {
                       query: { id: category.id },
                     }}
                   >
-                    <HomeIcon></HomeIcon>
+                    <DotsVerticalIcon></DotsVerticalIcon>
                   </Link>
                 </Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter>
       </Table>
     </>
   );

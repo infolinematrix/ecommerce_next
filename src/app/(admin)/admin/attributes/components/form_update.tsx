@@ -46,6 +46,7 @@ import { useAttriubteStore } from "../lib/store";
 import { CreateAttributeSchema } from "../lib/schema";
 import { AttrubuteValuesForm } from "./attribute_values_form";
 import { SelectGroup } from "@radix-ui/react-select";
+import { DeleteAttributeButton } from "./delete_button";
 
 export const UpdateForm = () => {
   const attribute = useAttriubteStore()((state: any) => state.attribute);
@@ -190,20 +191,17 @@ export const UpdateForm = () => {
           <div className="mt-8">
             {showValue ? (
               <div>
-                <div className="my-6 text-sm ">
-                  Drizzle provides you the most SQL-like way to fetch data from
-                  your database, while remaining type-safe and composable. It
-                  natively supports mostly every query feature and capability of
-                  every dialect, and whatever it doesn’t support yet, can be
-                  added by the user with the powerful sql operator.
+                <div className="my-6 text-sm font-semibold">
+                  Attribute values
                 </div>
+
                 <Separator className="my-6" />
                 <AttrubuteValuesForm />
               </div>
             ) : (
               <></>
             )}
-            <div className="mt-10">
+            <div className="flex flex-row gap-4 mt-10">
               {isLoading ? (
                 <Button disabled>
                   <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
@@ -215,10 +213,31 @@ export const UpdateForm = () => {
                   Save
                 </Button>
               )}
+              {/* <Button
+                type="button"
+                variant={"destructive"}
+                onClick={() => {
+                  const action = confirm("Are you sure?");
+                  if (action) {
+                    alert("Success");
+                  }
+                }}
+              >
+                <CrossCircledIcon className="mr-2 h-4 w-4" />
+                Delete
+              </Button> */}
             </div>
           </div>
         </form>
       </Form>
+
+      <div className="mt-8 text-sm">
+        <p>
+          Deleting the record, you may loose all the dependent data from the
+          database permamnently..
+        </p>
+        <DeleteAttributeButton id={attribute.id} />
+      </div>
     </>
   );
 };

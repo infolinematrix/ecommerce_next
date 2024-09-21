@@ -51,7 +51,7 @@ export function DashboardSidebar({
     },
     {
       title: "Products",
-      href: `#`,
+      href: `/admin/products`,
       icon: "product",
       active: segments.includes("products"),
     },

@@ -11,8 +11,11 @@ export const DeleteAttributeButton = ({ id }: any) => {
         <Button
           variant={"ghost"}
           onClick={(ev: any) => {
-            ev.preventDefault();
-            deleteAttributeById(id);
+            const action = confirm("Are you sure?");
+            if (action) {
+              ev.preventDefault();
+              deleteAttributeById(id);
+            }
           }}
         >
           <CrossCircledIcon></CrossCircledIcon>

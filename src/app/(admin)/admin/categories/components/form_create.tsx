@@ -52,6 +52,7 @@ export default function CategoryCreateForm(props: {
       short_description: "",
       has_child: "true",
       active: true,
+      product_type: "",
     },
   });
 
@@ -165,7 +166,7 @@ export default function CategoryCreateForm(props: {
                   value={field.value}
                 >
                   <div className="grid grid-cols-2 gap-4">
-                    <Card className="p-4 h-[170px] border-none ">
+                    <Card className="p-4 h-[200px] border-none ">
                       <RadioGroupItem
                         {...field}
                         value="true"
@@ -183,7 +184,7 @@ export default function CategoryCreateForm(props: {
                       </p>
                     </Card>
 
-                    <Card className="p-4 h-[170px] border-none ">
+                    <Card className="p-4 h-[200px] border-none ">
                       <RadioGroupItem
                         {...field}
                         value="false"
@@ -198,7 +199,7 @@ export default function CategoryCreateForm(props: {
                       </p>
                       <FormField
                         control={form.control}
-                        name="name"
+                        name="product_type"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Select type</FormLabel>

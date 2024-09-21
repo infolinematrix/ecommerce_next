@@ -18,6 +18,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/apiClient";
+import { useState } from "react";
+import { ReloadIcon, UploadIcon } from "@radix-ui/react-icons";
 
 export default function UpdateForm({ category }: any) {
   const form = useForm<z.infer<typeof updateCategorySchema>>({
@@ -33,6 +35,8 @@ export default function UpdateForm({ category }: any) {
     },
   });
 
+  const [isLoading, setLoading] = useState(false);
+
   const onSubmit = async (formData: z.infer<typeof updateCategorySchema>) => {
     //-parse zod schema
     const monkeyParse = updateCategorySchema.safeParse(formData);
@@ -43,15 +47,17 @@ export default function UpdateForm({ category }: any) {
     }
 
     const data = monkeyParse.data;
-
-    // console.log(data);
+    setLoading(true);
     const response = await api.put(`/admin/categories/update/api`, data, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
 
-    if (response.data.success) console.log(alert("Successfull"));
+    if (response.data.success) {
+      alert("Successfull");
+    }
+    setLoading(false);
   };
 
   return (
@@ -159,7 +165,18 @@ export default function UpdateForm({ category }: any) {
             >
               Reset
             </Button>
-            <Button type="submit">Save</Button>
+
+            {isLoading ? (
+              <Button disabled>
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button>
+                <UploadIcon className="mr-2 h-4 w-4" />
+                Save
+              </Button>
+            )}
           </div>
         </form>
       </Form>

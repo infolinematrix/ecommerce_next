@@ -14,6 +14,7 @@ export const createCategorySchema = z.object({
   short_description: z.string().min(3).max(255),
   has_child: z.string(),
   active: z.boolean(),
+  product_type: z.string(),
 });
 
 export const updateCategorySchema = z.object({

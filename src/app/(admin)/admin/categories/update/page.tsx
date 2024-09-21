@@ -29,15 +29,6 @@ interface Props {
 export default async function CategoryUpdatePage({ searchParams }: Props) {
   const category = await categoryById(searchParams.id);
 
-  const deleteCategory = async () => {
-    "use server";
-    const res = await categoryDeleteById(searchParams.id);
-    if (!res) console.log("Something went wrong..");
-    console.log("--------");
-
-    return <></>;
-  };
-
   return (
     <Shell variant="sidebar" className="overflow-hidden">
       <div className="flex flex-col">

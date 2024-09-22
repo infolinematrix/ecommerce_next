@@ -45,6 +45,7 @@ import {
 import { useType } from "../lib/store";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function CategoryCreateForm(props: {
   parentId: string | undefined;
@@ -293,17 +294,27 @@ export default function CategoryCreateForm(props: {
           <div className="mt-8">
             <div className="grid grid-cols-4 gap-4">
               <div className="flex bg-primary-foreground">
-                <div className="bg-slate-100 w-full h-[200px] object-fill relative flex  rounded-lg border">
+                <div className="bg-slate-100 w-full h-[150px] object-fill relative flex  rounded-lg border">
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4">
-                    <ImageIcon width={30} height={30} />
+                    {/* <ImageIcon width={30} height={30} /> */}
                   </div>
                 </div>
               </div>
               <div className="col-span-3">
                 <div className="flex bg-primary-foreground">
-                  <div className="bg-slate-100 w-full h-[200px] object-fill relative flex  rounded-lg border">
+                  <div className="bg-slate-100 w-full h-[150px] object-fill relative flex  rounded-lg border">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4">
-                      <ImageIcon width={30} height={30} />
+                      {/* <ImageIcon width={30} height={30} /> */}
+                      <Image
+                        // onLoadingComplete={(e) => handleImageLoad(e)}
+                        className=""
+                        src={"/public/images/admin_logo.png"}
+                        alt=""
+                        width={50}
+                        height={50}
+                        layout="responsive"
+                        objectFit="contain"
+                      />
                     </div>
                   </div>
                 </div>

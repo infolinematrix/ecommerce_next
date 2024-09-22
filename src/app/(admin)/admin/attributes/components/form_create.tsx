@@ -205,7 +205,7 @@ export default function CreateAttributeForm() {
           <div className="mt-10">
             {isLoading ? (
               <Button disabled>
-                <UploadIcon className="mr-2 h-4 w-4 animate-spin" />
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                 Please wait
               </Button>
             ) : (

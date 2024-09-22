@@ -45,6 +45,7 @@ export const TypeProvider = ({
   children: React.ReactNode;
 }) => {
   const [store] = useState(() => createTypeStore(initState));
+  console.log("--Initial state----", initState);
 
   return <TypeContext.Provider value={store}>{children}</TypeContext.Provider>;
 };

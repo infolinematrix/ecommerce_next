@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import api from "@/lib/apiClient";
 import { useState } from "react";
 import { ReloadIcon, UploadIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
+import { DeleteCategoryeButton } from "./delete_button";
 
 export default function UpdateForm({ category }: any) {
   const form = useForm<z.infer<typeof updateCategorySchema>>({
@@ -36,6 +38,7 @@ export default function UpdateForm({ category }: any) {
   });
 
   const [isLoading, setLoading] = useState(false);
+  const router = useRouter();
 
   const onSubmit = async (formData: z.infer<typeof updateCategorySchema>) => {
     //-parse zod schema
@@ -55,7 +58,9 @@ export default function UpdateForm({ category }: any) {
     });
 
     if (response.data.success) {
-      alert("Successfull");
+      // alert("Successfull");
+      router.refresh();
+      router.back();
     }
     setLoading(false);
   };
@@ -180,6 +185,14 @@ export default function UpdateForm({ category }: any) {
           </div>
         </form>
       </Form>
+
+      <div className="mt-8 text-sm">
+        <p>
+          Deleting the record, you may loose all the dependent data from the
+          database permamnently..
+        </p>
+        <DeleteCategoryeButton id={category.id}></DeleteCategoryeButton>
+      </div>
     </div>
   );
 }

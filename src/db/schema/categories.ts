@@ -18,7 +18,7 @@ export const categories = pgTable(
     identifier: text("identifier").notNull().unique(),
     has_child: boolean("has_child").default(true),
     active: boolean("active").default(true),
-
+    content_type: text("content_type"),
     short_description: text("short_description"),
 
     ...lifecycleDates,

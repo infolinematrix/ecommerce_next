@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import Link from "next/link";
 import CategoryCreateForm from "../components/form_create";
+import { get_types } from "@/lib/actions/types";
+import { TypeProvider } from "../../types/lib/zustandStore";
+import { CategoryStoreProvider } from "../lib/store";
 
 interface Props {
   param: string;
@@ -18,7 +21,10 @@ export default async function CreateCategoryPage({
   param,
   searchParams,
 }: Props) {
-  // const parent = await get_category(searchParams.parent);
+  const content_types = await get_types();
+  const initialData = {
+    content_types: content_types,
+  };
 
   return (
     // <Shell variant="sidebar" className="overflow-hidden">
@@ -83,7 +89,9 @@ export default async function CreateCategoryPage({
           <ScrollArea className="w-full pb-3.5 mt-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 overflow-hidden">
               <div className="lg:col-span-2">
-                <CategoryCreateForm parentId={searchParams.parent} />
+                <CategoryStoreProvider initState={initialData}>
+                  <CategoryCreateForm parentId={searchParams.parent} />
+                </CategoryStoreProvider>
               </div>
 
               {/* -----------RIGHT------------------- */}

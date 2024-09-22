@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { any, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CameraIcon, ImageIcon } from "@radix-ui/react-icons";
+import {
+  CameraIcon,
+  ImageIcon,
+  ReloadIcon,
+  UploadIcon,
+} from "@radix-ui/react-icons";
 import api, { fetcher } from "@/lib/apiClient";
 import { createCategorySchema } from "../types/category_types";
 import {
@@ -37,10 +42,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useType } from "../lib/store";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CategoryCreateForm(props: {
   parentId: string | undefined;
 }) {
+  const content_types = useType()((state: any) => state.content_types || []);
+  const [enableType, setEnatbleType] = useState(true);
+  const [isLoading, setLoading] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof createCategorySchema>>({
     resolver: zodResolver(createCategorySchema),
     mode: "onChange",
@@ -52,7 +64,7 @@ export default function CategoryCreateForm(props: {
       short_description: "",
       has_child: "true",
       active: true,
-      product_type: "",
+      content_type: "",
     },
   });
 
@@ -66,7 +78,7 @@ export default function CategoryCreateForm(props: {
     }
 
     const data = monkeyParse.data;
-
+    setLoading(true);
     // console.log(data);
 
     const response = await api.post(`/admin/categories/create/api`, data, {
@@ -75,7 +87,17 @@ export default function CategoryCreateForm(props: {
       },
     });
 
-    // console.log("...response", response);
+    if (response.status == 200) {
+      alert("Successfull");
+      router.back();
+    }
+    setLoading(false);
+  };
+
+  const hasChildOnChange = (ev: any) => {
+    const isTrue = ev === "true";
+    setEnatbleType(isTrue);
+    console.log(enableType);
   };
 
   return (
@@ -161,7 +183,12 @@ export default function CategoryCreateForm(props: {
               name="has_child"
               render={({ field }) => (
                 <RadioGroup
-                  onValueChange={field.onChange}
+                  onValueChange={(ev) => {
+                    field.onChange(ev);
+                    hasChildOnChange(ev);
+                    // setEnatbleType(ev);
+                    // console.log(ev);
+                  }}
                   defaultValue={field.value}
                   value={field.value}
                 >
@@ -197,22 +224,35 @@ export default function CategoryCreateForm(props: {
                         Allow adding products under this category, you can't
                         create child..
                       </p>
+
                       <FormField
                         control={form.control}
-                        name="product_type"
+                        name="content_type"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Select type</FormLabel>
                             <FormControl>
-                              <Select>
+                              <Select
+                                disabled={enableType}
+                                onValueChange={(ev) => {
+                                  field.onChange(ev);
+                                }}
+                              >
                                 <SelectTrigger>
                                   <SelectValue placeholder="Select input" />
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectGroup>
-                                    <SelectItem key={"sd"} value={"sd"}>
-                                      elec
-                                    </SelectItem>
+                                    {content_types.map(
+                                      (item: any, index: number) => (
+                                        <SelectItem
+                                          key={index}
+                                          value={item.identifier}
+                                        >
+                                          {item.name}
+                                        </SelectItem>
+                                      )
+                                    )}
                                   </SelectGroup>
                                 </SelectContent>
                               </Select>
@@ -279,7 +319,17 @@ export default function CategoryCreateForm(props: {
             >
               Reset
             </Button>
-            <Button type="submit">Create</Button>
+            {isLoading ? (
+              <Button disabled>
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button>
+                <UploadIcon className="mr-2 h-4 w-4" />
+                Save
+              </Button>
+            )}
           </div>
         </form>
       </Form>

@@ -1,8 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import React, { useState, createContext, useContext, useRef } from "react";
-import { stat } from "fs";
+import React, { useState, createContext, useContext } from "react";
 
 const createAttributeStore = (state: any | null) =>
   create((set) => {

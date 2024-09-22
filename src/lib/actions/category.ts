@@ -1,4 +1,3 @@
-import { createCategorySchema } from "@/app/(admin)/admin/categories/types/category_types";
 import { db } from "@/db";
 import { CategoryType } from "@/db/schema/categories";
 import { categories } from "@/db/schemas/categories";
@@ -54,6 +53,9 @@ export const create_category = async (data: any) => {
 export const categoryDeleteById = async (id: string) => {
   try {
     await db.delete(categories).where(eq(categories.id, id));
+
+    // revalidatePath("admin/categories");
+    return true;
   } catch (error) {
     console.log("Action Error: ", error);
     return false;

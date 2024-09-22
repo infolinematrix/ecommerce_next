@@ -1,5 +1,9 @@
-import { categoryUpdateById, create_category } from "@/lib/actions/category";
-import { NextResponse } from "next/server";
+import {
+  categoryDeleteById,
+  categoryUpdateById,
+  create_category,
+} from "@/lib/actions/category";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 export async function PUT(request: Request) {
